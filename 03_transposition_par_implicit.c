@@ -8,7 +8,8 @@
 void initializeMatrix(float **matrix, int n) {
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < n; j++) {
-            matrix[i][j] = (float)rand() / RAND_MAX * 100;
+            // matrix[i][j] = (float)rand() / RAND_MAX * 100;
+            matrix[i][j] = 1.0;
         }
     }
 }
@@ -109,12 +110,13 @@ int main() {
 
 // Code for average performance evaluation
 // int main() {
-//     int n = 10;
+//     int n;
 //     printf("Enter the size of the matrix: ");
 //     scanf("%d", &n);
-//     double total_time = 0.0;
+//     double total_s_time = 0.0;
+//     double total_t_time = 0.0;
 
-//     for (int z = 0; z < 10; z++) {
+//     for (int z = 0; z < 100; z++) {
 //         float **matrix = (float **)malloc(n * sizeof(float *));
 //         float **transpose = (float **)malloc(n * sizeof(float *));
 //         for (int i = 0; i < n; i++) {
@@ -134,23 +136,18 @@ int main() {
 //         QueryPerformanceCounter(&start_time);
 //         int isSymmetric = checkSymImp(matrix, n);
 //         QueryPerformanceCounter(&end_time);
-//         time_diff = (double)(end_time.QuadPart - start_time.QuadPart) *
-//         1000.0 /
-//                     frequency.QuadPart;
-//         printf("Time to check symmetry: %.4f ms ==> ", time_diff);
-//         printf("This matrix is %s\n", isSymmetric ? "symmetric" :
-//         "asymmetric");
+//         time_diff = (double)(end_time.QuadPart - start_time.QuadPart) * 1000.0 / frequency.QuadPart;
+//         // printf("Time to check symmetry: %.4f ms ==> ", time_diff);
+//         // printf("This matrix is %s\n", isSymmetric ? "symmetric" : "asymmetric");
+//         total_s_time += time_diff;
 
 //         // Performance evaluation of matrix transpose
-//         QueryPerformanceCounter(&start_time);  // Start timing
+//         QueryPerformanceCounter(&start_time);
 //         matTransposeImp(matrix, transpose, n);
-//         QueryPerformanceCounter(&end_time);  // End timing
-//         time_diff = (double)(end_time.QuadPart - start_time.QuadPart) *
-//         1000.0 /
-//                     frequency.QuadPart;
-//         printf("Time to transpose: %.4f ms\n", time_diff);
-//         total_time += time_diff;
-
+//         QueryPerformanceCounter(&end_time);
+//         time_diff = (double)(end_time.QuadPart - start_time.QuadPart) * 1000.0 / frequency.QuadPart;
+//         // printf("Time to transpose: %.4f ms\n", time_diff);
+//         total_t_time += time_diff;
 //         for (int i = 0; i < n; i++) {
 //             free(matrix[i]);
 //             free(transpose[i]);
@@ -158,7 +155,8 @@ int main() {
 //         free(matrix);
 //         free(transpose);
 //     }
-//     printf("Average time: %.4f ms\n", total_time / 10);
+//     printf("Average s time: %.6f ms\n", total_s_time / 100);
+//     printf("Average t time: %.6f ms\n", total_t_time / 100);
 
 //     return 0;
 // }
