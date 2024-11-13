@@ -46,8 +46,8 @@ int checkSymOMP(float **matrix, int n) {
 void matTransposeOMP(float **matrix, float **transposed, int n) {
     int blockSize = 32;  // Block size for cache optimization
 
-// Parallelize the outer loops
-#pragma omp parallel for collapse(2)
+    // Parallelize the outer loops
+    #pragma omp parallel for collapse(2)
     for (int i = 0; i < n; i += blockSize) {
         for (int j = 0; j < n; j += blockSize) {
             // Limit the blocks to the actual size of the matrix
