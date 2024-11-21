@@ -9,7 +9,8 @@
 void initializeMatrix(float **matrix, int n) {
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < n; j++) {
-            matrix[i][j] = (float)rand() / RAND_MAX * 100;
+            // matrix[i][j] = (float)rand() / RAND_MAX * 100;
+            matrix[i][j] = 1.0;
         }
     }
 }
@@ -17,30 +18,14 @@ void initializeMatrix(float **matrix, int n) {
 int checkSymOMP(float **matrix, int n) {
     float tolerance = 1e-6;  // Tolerance for floating-point comparison
 
-    // Parallelize the outer loop (if OpenMP is available)
     for (int i = 0; i < n; i++) {
-        // Prefetch the next row to optimize memory access
-        if (i + 1 < n) {
-            // Accessing a different row to prefetch
-            // This may not be true prefetching, but it hints to the CPU that we will need this data
-            volatile float *nextRow = matrix[i + 1];
-            (void)nextRow;  // Prevent compiler optimization
-        }
-
-        for (int j = i + 1; j < n; j++) {
-            // Prefetch the symmetric element
-            if (j < n) {
-                volatile float *symElement = &matrix[j][i];
-                (void)symElement;  // Prevent compiler optimization
-            }
-
-            // Use a simple comparison with tolerance for floating-point numbers
+        for(int j = 0; j < i; j++) {
             if (fabs(matrix[i][j] - matrix[j][i]) > tolerance) {
-                return 0;  // Not symmetric
+                return 0;
             }
         }
     }
-    return 1;  // Symmetric
+    return 1;
 }
 
 void matTransposeOMP(float **matrix, float **transposed, int n) {
@@ -48,18 +33,19 @@ void matTransposeOMP(float **matrix, float **transposed, int n) {
 
     // Parallelize the outer loops
     #pragma omp parallel for collapse(2)
-    for (int i = 0; i < n; i += blockSize) {
-        for (int j = 0; j < n; j += blockSize) {
-            // Limit the blocks to the actual size of the matrix
-            int maxI = i + blockSize > n ? n : i + blockSize;
-            int maxJ = j + blockSize > n ? n : j + blockSize;
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            transposed[j][i] = matrix[i][j];
+            // // Limit the blocks to the actual size of the matrix
+            // int maxI = i + blockSize > n ? n : i + blockSize;
+            // int maxJ = j + blockSize > n ? n : j + blockSize;
 
-            // Transpose the submatrix
-            for (int ii = i; ii < maxI; ++ii) {
-                for (int jj = j; jj < maxJ; ++jj) {
-                    transposed[jj][ii] = matrix[ii][jj];
-                }
-            }
+            // // Transpose the submatrix
+            // for (int ii = i; ii < maxI; ++ii) {
+            //     for (int jj = j; jj < maxJ; ++jj) {
+            //         transposed[jj][ii] = matrix[ii][jj];
+            //     }
+            // }
         }
     }
 }
@@ -97,7 +83,7 @@ int main() {
 
     // Performance evaluation of symmetric check
     QueryPerformanceCounter(&start_time);
-    int isSymmetric = checkSymImp(matrix, n);
+    int isSymmetric = checkSymOMP(matrix, n);
     QueryPerformanceCounter(&end_time);
     time_diff = (double)(end_time.QuadPart - start_time.QuadPart) * 1000.0 / frequency.QuadPart;
     printf("Time to check symmetry: %.4f ms ==> ", time_diff);
