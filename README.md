@@ -171,79 +171,77 @@ Some observations can be done after looking at the data provided.
 
 The following table contains the memory bandwidth utilization for each approach and matrix size, computed using the formulae above.
 
-<p align="center">
-  <table border="1">
-    <tr>
-      <th>Size</th>
-      <th>Data (MB)</th>
-      <th>Sequential (ms)</th>
-      <th>Implicit (ms)</th>
-      <th>OpenMP (ms)</th>
-    </tr>
-    <tr>
-      <td>16 x 16</td>
-      <td>0.001</td>
-      <td>0.000462</td>
-      <td>0.000100</td>
-      <td>0.088406</td>
-    </tr>
-    <tr>
-      <td>32 x 32</td>
-      <td>0.003</td>
-      <td>0.001851</td>
-      <td>0.000236</td>
-      <td>0.097082</td>
-    </tr>
-    <tr>
-      <td>64 x 64</td>
-      <td>0.015</td>
-      <td>0.007784</td>
-      <td>0.000746</td>
-      <td>0.094980</td>
-    </tr>
-    <tr>
-      <td>128 x 128</td>
-      <td>0.062</td>
-      <td>0.032118</td>
-      <td>0.004798</td>
-      <td>0.098189</td>
-    </tr>
-    <tr>
-      <td>256 x 256</td>
-      <td>0.250</td>
-      <td>0.128760</td>
-      <td>0.014329</td>
-      <td>0.117963</td>
-    </tr>
-    <tr>
-      <td>512 x 512</td>
-      <td>1.000</td>
-      <td>0.449411</td>
-      <td>0.097574</td>
-      <td>0.162131</td>
-    </tr>
-    <tr>
-      <td>1024 x 1024</td>
-      <td>4.000</td>
-      <td>2.789407</td>
-      <td>0.596318</td>
-      <td>0.440855</td>
-    </tr>
-    <tr>
-      <td>2048 x 2048</td>
-      <td>16.000</td>
-      <td>14.779019</td>
-      <td>4.474166</td>
-      <td>3.134817</td>
-    </tr>
-    <tr>
-      <td>4096 x 4096</td>
-      <td>64.000</td>
-      <td>72.229659</td>
-      <td>24.779411</td>
-      <td>13.321789</td>
-    </tr>
-  </table>
-</p>
+<table border="1" style="margin:auto">
+<tr>
+    <th>Size</th>
+    <th>Data (MB)</th>
+    <th>Sequential (%)</th>
+    <th>Implicit (%)</th>
+    <th>OpenMP (%)</th>
+</tr>
+<tr>
+    <td>16 x 16</td>
+    <td>0.001</td>
+    <td>2.016</td>
+    <td>9.313</td>
+    <td>0.011</td>
+</tr>
+<tr>
+    <td>32 x 32</td>
+    <td>0.003</td>
+    <td>2.013</td>
+    <td>15.785</td>
+    <td>0.038</td>
+</tr>
+<tr>
+    <td>64 x 64</td>
+    <td>0.015</td>
+    <td>1.914</td>
+    <td>19.975</td>
+    <td>0.157</td>
+</tr>
+<tr>
+    <td>128 x 128</td>
+    <td>0.062</td>
+    <td>1.856</td>
+    <td>12.423</td>
+    <td>0.607</td>
+</tr>
+<tr>
+    <td>256 x 256</td>
+    <td>0.250</td>
+    <td>1.852</td>
+    <td>16.639</td>
+    <td>2.021</td>
+</tr>
+<tr>
+    <td>512 x 512</td>
+    <td>1.000</td>
+    <td>2.122</td>
+    <td>9.774</td>
+    <td>5.882</td>
+</tr>
+<tr>
+    <td>1024 x 1024</td>
+    <td>4.000</td>
+    <td>1.368</td>
+    <td>6.397</td>
+    <td>8.653</td>
+</tr>
+<tr>
+    <td>2048 x 2048</td>
+    <td>16.000</td>
+    <td>1.032</td>
+    <td>3.410</td>
+    <td>4.868</td>
+</tr>
+<tr>
+    <td>4096 x 4096</td>
+    <td>64.000</td>
+    <td>0.845</td>
+    <td>2.463</td>
+    <td>4.582</td>
+</tr>
+</table>
 
 ## 5.Conclusion
