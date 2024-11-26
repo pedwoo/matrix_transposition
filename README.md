@@ -1,17 +1,59 @@
-# matrix_transposition
+# Matrix transposition
 
-Exploring different parallelization technologies to optimize matrix transposition
+## 0. Table of contents
 
-## 0. Introduction
+<ul style="list-style-type:none">
+    <li>1. <a href="#introduction">Introduction</a>
+        <ul style="list-style-type:none">
+            <li>1.1. <a href="#11-whats-the-importance-of-matrix-transposition">What's the importance of matrix transposition</a></li>
+            <li>1.2. <a href="#12-common-applications">Common applications</a></li>
+        </ul>
+    </li>
+    <li>2. <a href="#2-state-of-the-art">State of the art</a>
+        <ul style="list-style-type:none">
+            <li>2.1. <a href="#21-current-research-and-development">Current research and development</a>
+                <ul style="list-style-type:none">
+                    <li>2.1.1. <a href="#211-parallelization-with-openmp">Parallelization with OpenMP</a></li>
+                    <li>2.1.2. <a href="#212-parallelization-with-mpi">Parallelization with MPI</a></li>
+                    <li>2.1.3. <a href="#213-gpu-based-parallelization-with-cuda">Parallelization with CUDA</a></li>
+                </ul>
+            </li>
+            <li>2.2. <a href="#22-limitations-in-existing-solutions">Limitations in existing solutions</a>
+                <ul style="list-style-type:none">
+                    <li>2.2.1. <a href="#221-limitations-of-openmp">Limitations of OpenMP</a></li>
+                    <li>2.2.2. <a href="#222-limitations-of-mpi">Limitations of MPI</a></li>
+                    <li>2.2.3. <a href="#223-limitations-of-cuda">Limitations of CUDA</a></li>
+                </ul>
+            </li>
+        </ul>
+    </li>
+    <li>3. <a href="#3-contribution-and-methodology">Contribution and methodology</a></li>
+    <li>4. <a href="#4-experiments-and-system-description">Experiments and system description</a>
+        <ul style="list-style-type:none">
+            <li>4.1. <a href="#41-system-configuration">System configuration</a></li>
+            <li>4.2. <a href="#42-peak-performance-evaluation">Peak performance evaluation</a></li>
+        </ul>
+    </li>
+    <li>5. <a href="#5-results">Results</a>
+        <ul style="list-style-type:none">
+            <li>5.1. <a href="#51-experimental-times-per-approach-and-matrix-size">Experimental times per approach and matrix size</a></li>
+            <li>5.2. <a href="#52-experimental-times-on-the-unitn-cluster">Experimental times on the Unitn cluster</a></li>
+            <li>5.3. <a href="#53-experimental-memory-bandwidth-utilization">Experimental memory bandwidth utilization</a></li>
+            <li>5.4. <a href="#54-speedup-compared-to-baseline-approach">Speedup compared to baseline approach</a></li>
+        </ul>
+    </li>
+</ul>
+
+## 1. Introduction
 
 The goal of this project is to explore and evaluate various parallelization techniques in order to identify the most efficient solution for the given problem. Through this analysis, we aim to either pinpoint the optimal approach or, at the very least, provide comprehensive results and insights to support informed decision-making within the context of the problem.  
 First, we shall take a step back and understand why we are undertaking this task in the first place, and what its importance is.
 
-### 0.1 What's the importance of matrix transposition
+### 1.1 What's the importance of matrix transposition
 
 Matrices are fundamental in algebra, as they can encode a great amount of information that has diverse applications. Particularly, matrices that represent linear transformation are of great interest due to their wide-ranging utility since, by multiplying a specific matrix by any input vector, predictable transformations can be achieved, allowing consistent manipulations of vectors across various contexts.
 
-### 0.2 Common applications
+### 1.2 Common applications
 
 Matrices and transposition play crucial roles in various fields, including:
 
@@ -20,54 +62,58 @@ Matrices and transposition play crucial roles in various fields, including:
 -   **Scientific and numerical simulations**: In fields like physics and chemistry, matrices represent large datasets and enable complex transformations, crucial for realistic simulations.
 -   **Signal processing**: Matrices represent signal data, which may be transposed to align with computational steps such as those in Fourier Transform applications.
 
-## 1. State of the art
+## 2. State of the art
 
 As parallel computation became more popular and necessary in recent years, various strategies have been proposed to optimize operations such as matrix transposition, especially when working with large-scale computations.  
 This section will present these strategies along with their limitations, to finally define the gap our project aims to address.
 
-### 1.1 Current research and development
+### 2.1 Current research and development
 
-#### 1.1.1 Parallelization with OpenMP
+#### 2.1.1 Parallelization with OpenMP
 
 OpenMP is an extensively used framework for parallelizing programs on multi-core CPUs. It uses compuler directives, which enable developers to easily parallelize different sections of a program, like loops and functions, without significant changes to the code. OpenMP also offers solid scalability features, which make it suitable for matrix operations on a multi-core system.
 
-#### 1.1.2 Parallelization with MPI
+#### 2.1.2 Parallelization with MPI
 
 MPI (Message Passing Interface) is an established method for parallelizing computation on distributed memory systems. It allows different processes to communicate, making it suitable for large scale, distributed computing systems. When working on matrix transposition, MPI can split the matrix in different blocks and distribute them over multiple different nodes, allowing for parallel execution and at the same time minimizing the impact of memory limitations on individual processors.
 
-#### 1.1.3 GPU-based parallelization with CUDA
+#### 2.1.3 GPU-based parallelization with CUDA
 
 CUDA is a platform developed by NVIDIA that allows for GPU-accelerated matrix computation. Since GPUs offer a high degree of parallelism, CUDA can offer significant performance improvements in tasks such as matrix transposition. It is also worth mentioning that GPU memory normally has a much higher bandwidth compared to CPU memory, therefore making CUDA particularly effective for memory-bound operations.
 
-### 1.2 Limitations in existing solutions
+#### 2.1.4 Hybrid approaches
+
+A combination of the above mentioned methods can also be a solution, which is viable due to the increasing availability of heterogeneous computing systems. Using this methodology, one can for example use OpenMP for CPU-based parallelism and CUDA for gpu-based acceleration, allowing developers to exploit both types of hardware.
+
+### 2.2 Limitations in existing solutions
 
 In spite of the advances that are being made in parallel computing for matrix operations, some limitations remain across existing solutions:
 
-#### 1.2.1 Limitations of OpenMP
+#### 2.2.1 Limitations of OpenMP
 
 OpenMP has limited scalability with very large matrices, due to a high thread synchronization overhead and issues with memory contention. The performance gain is very often limited for larger matrices since the problem becomes more memory-bound than intensive in terms of computations.
 
-#### 1.2.2 Limitations of MPI
+#### 2.2.2 Limitations of MPI
 
 MPI is highly efficient for distributed systems, but also faces a high communication overhead, which hinders its performance for smaller-sized matrices. This is due to a high cost of internal process commmunication that ends up outweighing the benefits of such an approach.
 
-#### 1.2.3 Limitations of CUDA
+#### 2.2.3 Limitations of CUDA
 
 CUDA offers excellent performance on devices that are equipped with a GPU, but is often limited by its strict hardware dependency, since it requires specific optimizations based on the GPU.
 
-#### 1.2.4 Limitations of hybrid approaches
+#### 2.2.4 Limitations of hybrid approaches
 
 Hybrid approaches are able to deliver superior performance but require complex tuning and resource management, which ends up having the same per-hardware specificity issue that CUDA presents.
 
-### 1.3 Proposed solutions
+### 2.3 Proposed solutions
 
 The combination of the issues mentioned above ultimately lead to the impossibility to identify a "one size fits all" solution to the problem, and a context specific approach is to be preferred.
 
-## 2. Contribution and methodology
+## 3. Contribution and methodology
 
-## 3. Experiments and system description
+## 4. Experiments and system description
 
-### 3.1 System configuration
+### 4.1 System configuration
 
 Let's begin our examination of the experiments by first taking a step back, and outlining the technical specifications of the computing environment. The system used to run the scripts locally comprises the following specifications:
 
@@ -80,7 +126,7 @@ Let's begin our examination of the experiments by first taking a step back, and 
 
 Note that due to the system running windows, gcc compiler has to be installed separately, in this case through MinGW, and the gcc version is 6.3.0. Additional information to ensure an accurate reproduction of the instance used for testing is provided in section **6**.
 
-### 3.2 Peak performance evaluation
+### 4.2 Peak performance evaluation
 
 We can now take a brief look at what the system we perform the experiments on could theoretically allow in terms of performance. Not all of these informations provided above about the system are useful to our evaluation, the relevant specifics follow:
 
@@ -109,9 +155,9 @@ $$
 \text{(b)}~~\text{U}=\frac{\text{Total data transfer}}{\text{Experimental time}\times\text{Peak bandwidth}}\times 100
 $$
 
-## 4. Results
+## 5. Results
 
-#### Table: Experimental times per approach and matrix size
+### 5.1 Experimental times per approach and matrix size
 
 The results for each matrix size and approach follows. These results were obtained when testing locally.
 
@@ -191,7 +237,7 @@ The results for each matrix size and approach follows. These results were obtain
 </table>
 <br>
 
-#### Table: Experimental times on the Unitn cluster
+### 5.2 Experimental times on the Unitn cluster
 
 The results obtained when testing the code within the Unitn cluster follow. Only the OpenMP approach is in the table, alongside the sequential one which is only there to set a baseline for comparison. Additionally, results from small matrices have been removed, since they wouldn't hold any significance as the overhead from OpenMP bottlenecks the results, hence using more cores wouldn't cause any increase in performance.
 
@@ -200,7 +246,7 @@ Some observations can be done after looking at the data provided.
 -   The matrix sizes we have used for testing aren't large enough to the point where using a full 96 cores (1 node) or more is necessary at all, so after INSERT WHEN IT DOESN'T CHANGE ANYMORE providing more resources doesn't return any relevant improvement in the results.
 -   Parallelization through OpenMP for the smaller matrix sizes obtains marginal improvements, if any, compared to the others. This is due to the overhead that the use of OpenMP introduces in the program. The results are in fact "capped" to how fast this overhead can execute, and therefore present very similar results, which isn't the case for any other approach.
 
-#### Table: Experimental memory bandwidth utilization
+### 5.3 Experimental memory bandwidth utilization
 
 The following table contains the memory bandwidth utilization for each approach and matrix size, computed using the formulae above.
 
@@ -289,7 +335,7 @@ The following table contains the memory bandwidth utilization for each approach 
   </tbody>
 </table>
 
-#### Table: speedup compared to sequential approach
+### 5.4 Speedup compared to baseline approach
 
 We can now also compare the three approaches in terms of speedup. By using the sequential approach as a baseline, we can express in percentage how much faster each of the other approaches are, per matrix size.  
 We can compute the speedup using the formula that follows. Note that `Test time` represents the time for which we want to calculate the speedup:
@@ -365,9 +411,9 @@ The results per approach and matrix size follow.
     </tbody>
 </table>
 
-## 5.Conclusion
+## 6.Conclusion
 
-## 6. Installation and reproducibility of the results
+## 7. Installation and reproducibility of the results
 
 The repository containing all the code for the project can be found here [Github link](https://github.com/pedwoo/matrix_transposition.git).  
 After downloading the code (or cloning through the link), if not already installed, install gcc compiler. On a Linux machine this can simply be done from a command prompt, while on Windows third-party software is required. Since testing was also done on a Windows machine MinGW was used.  
