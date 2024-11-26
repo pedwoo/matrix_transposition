@@ -1,4 +1,4 @@
-# Matrix transposition
+# Matrix transposition in parallel
 
 ## 0. Table of contents
 
@@ -23,6 +23,9 @@
    &nbsp;&nbsp;&nbsp;&nbsp;5.2. [Experimental times on the Unitn cluster](#52-experimental-times-on-the-unitn-cluster)  
    &nbsp;&nbsp;&nbsp;&nbsp;5.3. [Experimental memory bandwidth utilization](#53-experimental-memory-bandwidth-utilization)  
    &nbsp;&nbsp;&nbsp;&nbsp;5.4. [Speedup compared to baseline approach](#54-speedup-compared-to-baseline-approach)
+6. [Conclusions](#6conclusion)
+7. [Installation and reproducibility of the results](#7-installation-and-reproducibility-of-the-results)
+8. [References](#8-references)
 
 ## 1. Introduction
 
@@ -398,3 +401,5 @@ The results per approach and matrix size follow.
 The repository containing all the code for the project can be found here [Github link](https://github.com/pedwoo/matrix_transposition.git).  
 After downloading the code (or cloning through the link), if not already installed, install gcc compiler. On a Linux machine this can simply be done from a command prompt, while on Windows third-party software is required. Since testing was also done on a Windows machine MinGW was used.  
 The specific configurations for MinGW can be found in the `utils` folder of the repository. The file in there was obtained by running the following command: `mingw-get list mingw-components.txt`. To reproduce the instance of MinGW, complete the installation through the installer, then in a command prompt use `mingw-get install <package-name>` to install the different packages.
+
+## 8. References
