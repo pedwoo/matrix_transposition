@@ -2,47 +2,27 @@
 
 ## 0. Table of contents
 
-<ul style="list-style-type:none">
-    <li>1. <a href="#introduction">Introduction</a>
-        <ul style="list-style-type:none">
-            <li>1.1. <a href="#11-whats-the-importance-of-matrix-transposition">What's the importance of matrix transposition</a></li>
-            <li>1.2. <a href="#12-common-applications">Common applications</a></li>
-        </ul>
-    </li>
-    <li>2. <a href="#2-state-of-the-art">State of the art</a>
-        <ul style="list-style-type:none">
-            <li>2.1. <a href="#21-current-research-and-development">Current research and development</a>
-                <ul style="list-style-type:none">
-                    <li>2.1.1. <a href="#211-parallelization-with-openmp">Parallelization with OpenMP</a></li>
-                    <li>2.1.2. <a href="#212-parallelization-with-mpi">Parallelization with MPI</a></li>
-                    <li>2.1.3. <a href="#213-gpu-based-parallelization-with-cuda">Parallelization with CUDA</a></li>
-                </ul>
-            </li>
-            <li>2.2. <a href="#22-limitations-in-existing-solutions">Limitations in existing solutions</a>
-                <ul style="list-style-type:none">
-                    <li>2.2.1. <a href="#221-limitations-of-openmp">Limitations of OpenMP</a></li>
-                    <li>2.2.2. <a href="#222-limitations-of-mpi">Limitations of MPI</a></li>
-                    <li>2.2.3. <a href="#223-limitations-of-cuda">Limitations of CUDA</a></li>
-                </ul>
-            </li>
-        </ul>
-    </li>
-    <li>3. <a href="#3-contribution-and-methodology">Contribution and methodology</a></li>
-    <li>4. <a href="#4-experiments-and-system-description">Experiments and system description</a>
-        <ul style="list-style-type:none">
-            <li>4.1. <a href="#41-system-configuration">System configuration</a></li>
-            <li>4.2. <a href="#42-peak-performance-evaluation">Peak performance evaluation</a></li>
-        </ul>
-    </li>
-    <li>5. <a href="#5-results">Results</a>
-        <ul style="list-style-type:none">
-            <li>5.1. <a href="#51-experimental-times-per-approach-and-matrix-size">Experimental times per approach and matrix size</a></li>
-            <li>5.2. <a href="#52-experimental-times-on-the-unitn-cluster">Experimental times on the Unitn cluster</a></li>
-            <li>5.3. <a href="#53-experimental-memory-bandwidth-utilization">Experimental memory bandwidth utilization</a></li>
-            <li>5.4. <a href="#54-speedup-compared-to-baseline-approach">Speedup compared to baseline approach</a></li>
-        </ul>
-    </li>
-</ul>
+1. [Introduction](#introduction)  
+   &nbsp;&nbsp;&nbsp;&nbsp;1.1. [What's the importance of matrix transposition](#11-whats-the-importance-of-matrix-transposition)  
+   &nbsp;&nbsp;&nbsp;&nbsp;1.2. [Common applications](#12-common-applications)
+2. [State of the art](#2-state-of-the-art)  
+   &nbsp;&nbsp;&nbsp;&nbsp;2.1. [Current research and development](#21-current-research-and-development)  
+   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.1.1. [Parallelization with OpenMP](#211-parallelization-with-openmp)  
+   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.1.2. [Parallelization with MPI](#212-parallelization-with-mpi)  
+   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.1.3. [Parallelization with CUDA](#213-gpu-based-parallelization-with-cuda)  
+   &nbsp;&nbsp;&nbsp;&nbsp;2.2. [Limitations in existing solutions](#22-limitations-in-existing-solutions)  
+   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.2.1. [Limitations of OpenMP](#221-limitations-of-openmp)  
+   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.2.2. [Limitations of MPI](#222-limitations-of-mpi)  
+   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.2.3. [Limitations of CUDA](#223-limitations-of-cuda)
+3. [Contribution and methodology](#3-contribution-and-methodology)
+4. [Experiments and system description](#4-experiments-and-system-description)  
+   &nbsp;&nbsp;&nbsp;&nbsp;4.1. [System configuration](#41-system-configuration)  
+   &nbsp;&nbsp;&nbsp;&nbsp;4.2. [Peak performance evaluation](#42-peak-performance-evaluation)
+5. [Results](#5-results)  
+   &nbsp;&nbsp;&nbsp;&nbsp;5.1. [Experimental times per approach and matrix size](#51-experimental-times-per-approach-and-matrix-size)  
+   &nbsp;&nbsp;&nbsp;&nbsp;5.2. [Experimental times on the Unitn cluster](#52-experimental-times-on-the-unitn-cluster)  
+   &nbsp;&nbsp;&nbsp;&nbsp;5.3. [Experimental memory bandwidth utilization](#53-experimental-memory-bandwidth-utilization)  
+   &nbsp;&nbsp;&nbsp;&nbsp;5.4. [Speedup compared to baseline approach](#54-speedup-compared-to-baseline-approach)
 
 ## 1. Introduction
 
