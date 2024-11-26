@@ -67,28 +67,32 @@ The combination of the issues mentioned above ultimately lead to the impossibili
 
 ## 3. Experiments and system description
 
-### 3.1 Computing system and platform
+### 3.1 System configuration
 
-Let's begin our examination of the experiments by first taking a step back, and outlining the technical specifications of the computing environment. This windows-based system features an AMD Ryzen 7 7840HS CPU and 32GB of LPDDR5X-6400 RAM, mounted across four slots.
+Let's begin our examination of the experiments by first taking a step back, and outlining the technical specifications of the computing environment. The system used to run the scripts locally comprises the following specifications:
 
-### 3.2 Specifications and configurations
+-   **CPU**: AMD Ryzen 7840HS (8 cores, 16 threads) with a base clock speed of 3.8GHz and maximum boost clock of 5.1GHz.
+-   **Memory**: 32GB LPDDR5x operating at 6400MT/s with dual channel configuration.
+-   **Storage**: 1TB NVMe SSD.
+-   **Operating system**: Windows 11 Home version 23H2.
+-   **Compiler**: GCC 6.3.0 with OpenMP enabled.
+-   **Additional libraries**: Standard C libraries for numerical computation and OpenMP for parallel processing.
 
-Due to the system running windows, gcc compiler has to be installed separately, in this case through MinGW, and the gcc version is 6.3.0. Additional information to ensure an accurate reproduction of the instance used for testing is provided in section **6**. No additional components or configurations are necessary to ensure the reproducibility of the results locally.  
-Testing on the Unitn cluster the default gcc compiler version installed is 4.8.5, but version 9.1.0 is manually loaded when testing.
+Note that due to the system running windows, gcc compiler has to be installed separately, in this case through MinGW, and the gcc version is 6.3.0. Additional information to ensure an accurate reproduction of the instance used for testing is provided in section **6**.
 
-### 3.3 Peak performance evaluation
+### 3.2 Peak performance evaluation
 
-We can now take a brief look at what the system we perform the experiments on could theoretically allow in terms of performance. As mentioned before, the machine in question's memory is composed of 4 sticks of 8GB LPDDR5X-6400 memory (32GB total) and mounts a Ryzen 7 7840HS CPU. Not all of these informations are useful to our evaluation, the relevant specifics follow:
+We can now take a brief look at what the system we perform the experiments on could theoretically allow in terms of performance. Not all of these informations provided above about the system are useful to our evaluation, the relevant specifics follow:
 
--   Memory clock speed: 6400MT/s
--   Memory bus width: 32bits (8 bytes) per channel
--   Memory channels: 4 (supported by the RAM)
--   Memory channels: 2 (supported by the CPU)
+-   **Memory clock speed**: 6400MT/s
+-   **Memory bus width**: 32bits (4 bytes) per channel
+-   **Memory channels**: 4 (supported by the RAM)
+-   **Memory channels**: 2 (supported by the CPU)
 
 For DDR type memory, bandwidth can be simply computed as:
 $$\text{Memory bandwdith}=\text{Memory clock speed}\times\text{Memory bus width}\times\text{Number of channels}$$
-Sadly, although the RAM would allow for 4-channel access, the CPU only supports 2-channel access, effectively cutting in half the actual achievable memory bandwidth, for a total of 102.4GB/s. This value will be used for the calculation, even though with a more powerful CPU the memory could allow higher transfer speeds.
-
+$$\text{Memory bandwidth}=6400\times10^6\times32\times4=819.2\text{Gbps}=102.4\text{GBps}$$
+Sadly, even though the RAM works in a 4-channel configuration, the CPU only allows for dual-channel memory access, effectively cutting in half the usable bandwidth. The value used in calculations will therefore be $51.2\text{GBps}$, even through a more powerful CPU would allow the use of the entire memory bandwidth.  
 With this number in mind, we can go on to compute the theoretical times it would take to transpose each size of matrix supposing full memory bandwidth utilization. The formula follows:
 
 $$
@@ -98,7 +102,7 @@ $$
 Computing this allows us two ways to approach the calculation of the effective memory bandwidth utilization (U) for each of the solution proposed: one way is to compute the ratio between the theoretical and experimental times (a), while the other is the ratio of experimental data transfer and what peak bandwidth would allow in that same amount of time (b)
 
 $$
-\text{(a)}~~\text{U}=\frac{\text{Theoretical time}}{\text{Experimental time}}\times 100
+\text{(a)}~~\text{U}=\frac{\text{Experimental time}}{\text{Theoretical time}}\times 100
 $$
 
 $$
@@ -107,169 +111,264 @@ $$
 
 ## 4. Results
 
+#### Table: Experimental times per approach and matrix size
+
 The results for each matrix size and approach follows. These results were obtained when testing locally.
 
 <table border="1" style="margin:auto">
-    <tr>
+    <thead>
         <th>Size</th>
         <th>Data (MB)</th>
         <th>Sequential (ms)</th>
         <th>Implicit (ms)</th>
         <th>OpenMP (ms)</th>
-    </tr>
-    <tr>
-        <td>16 x 16</td>
-        <td>0.001</td>
-        <td>0.000462</td>
-        <td>0.000100</td>
-        <td>0.088406</td>
-    </tr>
-    <tr>
-        <td>32 x 32</td>
-        <td>0.003</td>
-        <td>0.001851</td>
-        <td>0.000236</td>
-        <td>0.097082</td>
-    </tr>
-    <tr>
-        <td>64 x 64</td>
-        <td>0.015</td>
-        <td>0.007784</td>
-        <td>0.000746</td>
-        <td>0.094980</td>
-    </tr>
-    <tr>
-        <td>128 x 128</td>
-        <td>0.062</td>
-        <td>0.032118</td>
-        <td>0.004798</td>
-        <td>0.098189</td>
-    </tr>
-    <tr>
-        <td>256 x 256</td>
-        <td>0.250</td>
-        <td>0.128760</td>
-        <td>0.014329</td>
-        <td>0.117963</td>
-    </tr>
-    <tr>
-        <td>512 x 512</td>
-        <td>1.000</td>
-        <td>0.449411</td>
-        <td>0.097574</td>
-        <td>0.162131</td>
-    </tr>
-    <tr>
-        <td>1024 x 1024</td>
-        <td>4.000</td>
-        <td>2.789407</td>
-        <td>0.596318</td>
-        <td>0.440855</td>
-    </tr>
-    <tr>
-        <td>2048 x 2048</td>
-        <td>16.000</td>
-        <td>14.779019</td>
-        <td>4.474166</td>
-        <td>3.134817</td>
-    </tr>
-    <tr>
-        <td>4096 x 4096</td>
-        <td>64.000</td>
-        <td>72.229659</td>
-        <td>24.779411</td>
-        <td>13.321789</td>
-    </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>16 x 16</td>
+            <td>0.001</td>
+            <td>0.000462</td>
+            <td>0.000100</td>
+            <td>0.088406</td>
+        </tr>
+        <tr>
+            <td>32 x 32</td>
+            <td>0.003</td>
+            <td>0.001851</td>
+            <td>0.000236</td>
+            <td>0.097082</td>
+        </tr>
+        <tr>
+            <td>64 x 64</td>
+            <td>0.015</td>
+            <td>0.007784</td>
+            <td>0.000746</td>
+            <td>0.094980</td>
+        </tr>
+        <tr>
+            <td>128 x 128</td>
+            <td>0.062</td>
+            <td>0.032118</td>
+            <td>0.004798</td>
+            <td>0.098189</td>
+        </tr>
+        <tr>
+            <td>256 x 256</td>
+            <td>0.250</td>
+            <td>0.128760</td>
+            <td>0.014329</td>
+            <td>0.117963</td>
+        </tr>
+        <tr>
+            <td>512 x 512</td>
+            <td>1.000</td>
+            <td>0.449411</td>
+            <td>0.097574</td>
+            <td>0.162131</td>
+        </tr>
+        <tr>
+            <td>1024 x 1024</td>
+            <td>4.000</td>
+            <td>2.789407</td>
+            <td>0.596318</td>
+            <td>0.440855</td>
+        </tr>
+        <tr>
+            <td>2048 x 2048</td>
+            <td>16.000</td>
+            <td>14.779019</td>
+            <td>4.474166</td>
+            <td>3.134817</td>
+        </tr>
+        <tr>
+            <td>4096 x 4096</td>
+            <td>64.000</td>
+            <td>72.229659</td>
+            <td>24.779411</td>
+            <td>13.321789</td>
+        </tr>
+    </tbody>
 </table>
+<br>
 
-The results obtained when testing the code within the Unitn cluster follow
+#### Table: Experimental times on the Unitn cluster
 
-TABLE CONTAINING RESULTS FROM THE CLUSTER
+The results obtained when testing the code within the Unitn cluster follow. Only the OpenMP approach is in the table, alongside the sequential one which is only there to set a baseline for comparison. Additionally, results from small matrices have been removed, since they wouldn't hold any significance as the overhead from OpenMP bottlenecks the results, hence using more cores wouldn't cause any increase in performance.
 
 Some observations can be done after looking at the data provided.
 
 -   The matrix sizes we have used for testing aren't large enough to the point where using a full 96 cores (1 node) or more is necessary at all, so after INSERT WHEN IT DOESN'T CHANGE ANYMORE providing more resources doesn't return any relevant improvement in the results.
 -   Parallelization through OpenMP for the smaller matrix sizes obtains marginal improvements, if any, compared to the others. This is due to the overhead that the use of OpenMP introduces in the program. The results are in fact "capped" to how fast this overhead can execute, and therefore present very similar results, which isn't the case for any other approach.
 
-### Table: Experimental memory bandwidth utilization
+#### Table: Experimental memory bandwidth utilization
 
 The following table contains the memory bandwidth utilization for each approach and matrix size, computed using the formulae above.
 
 <table border="1" style="margin:auto">
-    <tr>
-        <th>Size</th>
+    <thead>
+        <th>Matrix Size</th>
         <th>Data (MB)</th>
+        <th>Ideal time (ms)</th>
         <th>Sequential (%)</th>
         <th>Implicit (%)</th>
         <th>OpenMP (%)</th>
-    </tr>
+  </thead>
+  <tbody>
     <tr>
         <td>16 x 16</td>
-        <td>0.001</td>
-        <td>2.016</td>
-        <td>9.313</td>
-        <td>0.011</td>
+        <td>0.002</td>
+        <td>0.000037</td>
+        <td>8.063</td>
+        <td>37.253</td>
+        <td>0.042</td>
     </tr>
     <tr>
         <td>32 x 32</td>
-        <td>0.003</td>
-        <td>2.013</td>
-        <td>15.785</td>
-        <td>0.038</td>
+        <td>0.008</td>
+        <td>0.000149</td>
+        <td>8.050</td>
+        <td>63.141</td>
+        <td>0.153</td>
     </tr>
     <tr>
         <td>64 x 64</td>
-        <td>0.015</td>
-        <td>1.914</td>
-        <td>19.975</td>
-        <td>0.157</td>
+        <td>0.032</td>
+        <td>0.000596</td>
+        <td>7.657</td>
+        <td>79.899</td>
+        <td>0.628</td>
     </tr>
     <tr>
         <td>128 x 128</td>
-        <td>0.062</td>
-        <td>1.856</td>
-        <td>12.423</td>
-        <td>0.607</td>
+        <td>0.128</td>
+        <td>0.002384</td>
+        <td>7.423</td>
+        <td>49.691</td>
+        <td>2.428</td>
     </tr>
     <tr>
         <td>256 x 256</td>
-        <td>0.250</td>
-        <td>1.852</td>
-        <td>16.639</td>
-        <td>2.021</td>
+        <td>0.512</td>
+        <td>0.009537</td>
+        <td>7.407</td>
+        <td>66.556</td>
+        <td>8.085</td>
     </tr>
     <tr>
         <td>512 x 512</td>
-        <td>1.000</td>
-        <td>2.122</td>
-        <td>9.774</td>
-        <td>5.882</td>
+        <td>2</td>
+        <td>0.038147</td>
+        <td>8.488</td>
+        <td>39.095</td>
+        <td>23.528</td>
     </tr>
     <tr>
         <td>1024 x 1024</td>
-        <td>4.000</td>
-        <td>1.368</td>
-        <td>6.397</td>
-        <td>8.653</td>
+        <td>8</td>
+        <td>0.152588</td>
+        <td>5.470</td>
+        <td>25.588</td>
+        <td>34.612</td>
     </tr>
     <tr>
         <td>2048 x 2048</td>
-        <td>16.000</td>
-        <td>1.032</td>
-        <td>3.410</td>
-        <td>4.868</td>
+        <td>32</td>
+        <td>0.610352</td>
+        <td>4.130</td>
+        <td>13.642</td>
+        <td>19.470</td>
     </tr>
     <tr>
         <td>4096 x 4096</td>
-        <td>64.000</td>
-        <td>0.845</td>
-        <td>2.463</td>
-        <td>4.582</td>
+        <td>128</td>
+        <td>2.441406</td>
+        <td>3.380</td>
+        <td>9.853</td>
+        <td>18.326</td>
     </tr>
+  </tbody>
+</table>
+
+#### Table: speedup compared to sequential approach
+
+We can now also compare the three approaches in terms of speedup. By using the sequential approach as a baseline, we can express in percentage how much faster each of the other approaches are, per matrix size.  
+We can compute the speedup using the formula that follows. Note that `Test time` represents the time for which we want to calculate the speedup:
+
+$$
+\text{Speedup (\%)}=\frac{\text{Baseline time - Test time}}{\text{Baseline time}}\times100
+$$
+
+The results per approach and matrix size follow.
+
+<table border="1" style="margin:auto">
+    <thead>
+        <th>Matrix Size</th>
+        <th>Sequential Time (ms)</th>
+        <th>Implicit Speedup (%)</th>
+        <th>OpenMP Speedup (%)</th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>16 x 16</td>
+            <td>0.000462</td>
+            <td>462</td>
+            <td>0.52</td>
+        </tr>
+        <tr>
+            <td>32 x 32</td>
+            <td>0.001851</td>
+            <td>784</td>
+            <td>1.91</td>
+        </tr>
+        <tr>
+            <td>64 x 64</td>
+            <td>0.007784</td>
+            <td>1046</td>
+            <td>8.20</td>
+        </tr>
+        <tr>
+            <td>128 x 128</td>
+            <td>0.032118</td>
+            <td>670</td>
+            <td>32.70</td>
+        </tr>
+        <tr>
+            <td>256 x 256</td>
+            <td>0.128760</td>
+            <td>899</td>
+            <td>109.23</td>
+        </tr>
+        <tr>
+            <td>512 x 512</td>
+            <td>0.449411</td>
+            <td>460</td>
+            <td>277.41</td>
+        </tr>
+        <tr>
+            <td>1024 x 1024</td>
+            <td>2.789407</td>
+            <td>468</td>
+            <td>632.54</td>
+        </tr>
+        <tr>
+            <td>2048 x 2048</td>
+            <td>14.779019</td>
+            <td>331</td>
+            <td>471.50</td>
+        </tr>
+        <tr>
+            <td>4096 x 4096</td>
+            <td>72.229659</td>
+            <td>293</td>
+            <td>542.61</td>
+        </tr>
+    </tbody>
 </table>
 
 ## 5.Conclusion
 
 ## 6. Installation and reproducibility of the results
 
+The repository containing all the code for the project can be found here [Github link](https://github.com/pedwoo/matrix_transposition.git).  
+After downloading the code (or cloning through the link), if not already installed, install gcc compiler. On a Linux machine this can simply be done from a command prompt, while on Windows third-party software is required. Since testing was also done on a Windows machine MinGW was used.  
 The specific configurations for MinGW can be found in the `utils` folder of the repository. The file in there was obtained by running the following command: `mingw-get list mingw-components.txt`. To reproduce the instance of MinGW, complete the installation through the installer, then in a command prompt use `mingw-get install <package-name>` to install the different packages.
