@@ -15,21 +15,29 @@ void initializeMatrix(float **matrix, int n) {
 }
 
 int checkSymImp(float **matrix, int n) {
-    float tolerance = 1e-6;  // Tolerance for floating-point comparison
+    int blockSize = 32;
 
-    for (int i = 0; i < n; i++) {
-        // Prefetch the row for the current index to optimize memory access
-        _mm_prefetch((const char *)&matrix[i + 1][0], _MM_HINT_T0);
+    for (int i = 0; i < n; i += blockSize) {
+        for (int j = i; j < n; j += blockSize) {
+            int maxI = (i + blockSize > n) ? n : i + blockSize;
+            int maxJ = (j + blockSize > n) ? n : j + blockSize;
 
-        for (int j = i + 1; j < n; j++) {
-            _mm_prefetch((const char *)&matrix[j][i], _MM_HINT_T0);
+            for (int ii = i; ii < maxI; ++ii) {
+                for (int jj = (ii == i ? j : i); jj < maxJ; jj += 4) {
+                    if (jj + 4 <= maxJ) {
+                        __m128 rowElems = _mm_loadu_ps(&matrix[ii][jj]);
+                        __m128 colElems = _mm_set_ps(matrix[jj + 3][ii], matrix[jj + 2][ii], matrix[jj + 1][ii], matrix[jj][ii]);
+                        __m128 cmp = _mm_cmpeq_ps(rowElems, colElems);
 
-            // Use SIMD to compare elements, ensuring we do not access out of bounds
-            if (fabs(matrix[i][j] - matrix[j][i]) > tolerance) {
-                return 0;
+                        if (_mm_movemask_ps(cmp) != 0xF) {
+                            return 0;
+                        }
+                    }
+                }
             }
         }
     }
+
     return 1;
 }
 
@@ -41,9 +49,9 @@ void matTransposeImp(float **matrix, float **transposed, int n) {
             int maxI = i + blockSize > n ? n : i + blockSize;
             int maxJ = j + blockSize > n ? n : j + blockSize;
 
-            for (int ii = i; ii < maxI; ii += 4) {  // We can processo 4 floats at a time
+            for (int ii = i; ii < maxI; ii += 4) {
                 for (int jj = j; jj < maxJ; ++jj) {
-                    _mm_prefetch((const char *)&matrix[ii][jj + 1], _MM_HINT_T0);  // Prefetch next element
+                    _mm_prefetch((float *)&matrix[ii][jj + 1], _MM_HINT_T0);
                     __m128 vec = _mm_loadu_ps(&matrix[ii][jj]);
                     _mm_storeu_ps(&transposed[jj][ii], vec);
                 }

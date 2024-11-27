@@ -38,7 +38,7 @@ Matrices are fundamental in algebra, as they can encode a great amount of inform
 
 ### 1.2 Common applications
 
-Matrices and transposition play crucial roles in various fields, including:
+Matrices are widely used throughout various scientific fields, as they can encode a very large amount of information in a compact manner. Their importance lies in the ability to represent and apply both linear and non-linear transformations, which is one of their primary applications. The fields in which matrices and transposition play a crucial role include:
 
 -   **Deep learning**: Particularly withing neural networks and convolutional layers, where data often requires reshaping or alignment for specific layer operations. Large input batches may need to be transposed to fit model expectations.
 -   **Graphics and image processing**: Operations like rotations, reflections, and texture mapping are used extensively, where matrix transposition facilitates precise image representation and manipulations.
@@ -88,11 +88,57 @@ CUDA offers excellent performance on devices that are equipped with a GPU, but i
 
 Hybrid approaches are able to deliver superior performance but require complex tuning and resource management, which ends up having the same per-hardware specificity issue that CUDA presents.
 
-### 2.3 Proposed solutions
-
-The combination of the issues mentioned above ultimately lead to the impossibility to identify a "one size fits all" solution to the problem, and a context specific approach is to be preferred.
-
 ## 3. Contribution and methodology
+
+### 3.1 Sequential approach
+
+Approaching matrix transposition from a sequential point of view is an almost trivial problem. The one thing that can be noted, which persists throughout all the solutions proposed, is that due to the size of the matrix being decided at runtime, we cannot statically declare the matrices but must instead allocate memory dynamically. This is achieved using `malloc`, which allows memory to be allocated on the heap during program execution.
+
+The compilation command, which is in line with the structure of the repository (found [Here](https://github.com/pedwoo/matrix_transposition.git)) follows:
+
+```
+gcc 01_transposition_sequential.c -o ./exec/01_transposition_sequential.exe
+```
+
+Also to be noted is the method of registering times, for which we use `QueryPerformanceCounter`. This is a way of measuring time based on the clock frequency of the CPU, rather than a more commong wall clock, thus achieving higher precision, especially when working with very short times.
+
+### 3.2 Implicit parallelism
+
+A significant performance improvement can be done on the sequential approach by making use of implicit parallelism techniques like vectorization, prefetching, and overall optimizing the memory access patterns. An overview of how the code procedes to transpose the matrix once initiated follows:
+
+-   A `blockSize` is defined in order to split the matrix into blocks (which are matrices themselves) and transpose them one block at a time. In the experiments 32 is always the value used, although using a smaller value would yield a greater performance improvement also for smaller matrices.  
+    The reason to split the matrix is to improve cache locality by ensuring that the data is accessed in contiguous chunks, and reduce the amount of cache misses as the block is small enough that it can be fully cached, only causing cache misses when changing from one block to the next.
+-   The boundaries of the current block are defined in order to be used.
+-   The elements inside the boundaries just defined are processed. By using the type `__m128` we are able to store 4 float values (4 x 32-bit) in a single 128-bit register, thus improving the locality of the different cache accesses.  
+    &nbsp;&nbsp;&nbsp;&nbsp;**1**. Values to be used in the next iteration are loaded to L1 cache  
+    &nbsp;&nbsp;&nbsp;&nbsp;**2**. 4 floats are from the current row (ii) are contiguously saved in a single register  
+    &nbsp;&nbsp;&nbsp;&nbsp;**3**. The 4 floats previously saved are loaded into the transposed matrix along column jj
+
+A note has to be made about the symmetry check function (`checkSymImp`): this function uses the same principles mentioned above for the transposition, except the comparison of the "row elements" with the "column elements" which is done differently from the transposition, of course:
+
+-   The elements of the row are loaded in `rowElems` (contiguously).
+-   The elements of the column are loaded in `colElems` (contiguously).
+-   They are compared using `_mm_cmpeq_ps` in order to compare the 128-bit registers directly.
+-   The comparison, which was saved in `cmp` is converted into a bitmask. Each bit in the resulting integer corresponds to one of the comparison results. If the values are the same, the individual comparison returns 1, hence by checking that the final value is 0xF (all 1s), we want that all comparisons were successful.
+
+The compilation command, which is in line with the structure of the repository (found [Here](https://github.com/pedwoo/matrix_transposition.git)) follows:
+
+```
+gcc -O2 -march=native 03_transposition_par_implicit.c -o ./exec/03_transposition_par_implicit.exe
+```
+
+This is the combination of compiler flags/code optimization that returned the best performance increase ([Results here](#51-experimental-times-per-approach-and-matrix-size)). A brief explanation of the flags used follows:
+
+-   `-O2`: Used to employ general compiler optimizations like loop unrolling, inlining functions and reducing unnecessary instructions.
+-   `-march=native`: Used to enable the use of vectorization (SIMD instructions).
+
+### 3.3 Parallelism through OpenMP
+
+The compilation command, which is in line with the structure of the repository (found [Here](https://github.com/pedwoo/matrix_transposition.git)) follows:
+
+```
+
+```
 
 ## 4. Experiments and system description
 
