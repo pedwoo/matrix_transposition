@@ -122,12 +122,13 @@ A note has to be made about the symmetry check function (`checkSymImp`): this fu
 -   The elements of the row are loaded in `rowElems` (contiguously).
 -   The elements of the column are loaded in `colElems` (contiguously).
 -   They are compared using `_mm_cmpeq_ps` in order to compare the 128-bit registers directly.
--   The comparison, which was saved in `cmp` is converted into a bitmask. Each bit in the resulting integer corresponds to one of the comparison results. If the values are the same, the individual comparison returns 1, hence by checking that the final value is 0xF (all 1s), we want that all comparisons were successful.
+-   The comparison, which was saved in `cmp` is converted into a bitmask. Each bit in the resulting integer corresponds to one of the comparison results. If the values are the same, the individual comparison returns 1, hence by checking that the final value is 0xF (all 1s), we want that all comparisons were successful.  
+    Regardless of this, considering the symmetry check is a simple operation, adding all of this overhead only slows down the execution massively, even compared to the baseline sequential approach. For this reason, the parallel code is commented in the repository, in favour of a standard procedure.
 
 The compilation command, which is in line with the structure of the repository (found [Here](https://github.com/pedwoo/matrix_transposition.git)) follows:
 
 ```
-gcc -O2 -march=native 03_transposition_par_implicit.c -o ./exec/03_transposition_par_implicit.exe
+gcc -O2 -march=native 02_transposition_par_implicit.c -o ./exec/02_transposition_par_implicit.exe
 ```
 
 This is the combination of compiler flags/code optimization that returned the best performance increase ([Results here](#51-experimental-times-per-approach-and-matrix-size)). A brief explanation of the flags used follows:
