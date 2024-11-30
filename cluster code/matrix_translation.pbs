@@ -55,15 +55,23 @@ echo "Running OpenMP Approach with 1 thread"
 ./exec/03_transposition_par_openmp 1 1
 echo ""
 echo "Running OpenMP Approach with 2 threads"
-./exec/03_transposition_par_openmp 1 0
+./exec/03_transposition_par_openmp 2 0
 echo ""
 echo "Running OpenMP Approach with 4 threads"
-./exec/03_transposition_par_openmp 1 0
+./exec/03_transposition_par_openmp 4 0
 echo ""
 echo "Running OpenMP Approach with 8 threads"
-./exec/03_transposition_par_openmp 1 0
+./exec/03_transposition_par_openmp 8 0
 echo ""
 echo "Running OpenMP Approach with 16 threads"
-./exec/03_transposition_par_openmp 1 0
+./exec/03_transposition_par_openmp 16 0
 echo ""
-
+echo "Running OpenMP Approach with 32 threads"
+./exec/03_transposition_par_openmp 32 0
+echo ""
+echo "Running OpenMP Approach with 64 threads"
+./exec/03_transposition_par_openmp 64 0
+echo ""
+echo "Running OpenMP Approach with 96 threads"
+./exec/03_transposition_par_openmp 96 0
+echo ""
