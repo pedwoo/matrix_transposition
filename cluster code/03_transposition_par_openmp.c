@@ -65,8 +65,10 @@ void matTransposeOMP(float **matrix, float **transposed, int n) {
 
 // Code for average performance evaluation
 const int sizes[] = {16, 32, 64, 128, 256, 512, 1024, 2048, 4096};
-int main() {
-    printf("TRANSPOSITION TIME EVALUATION\n");
+int main(int argc, char *argv[]) {
+    int n_threads = atoi(argv[1]);
+    int symmetry_check = atoi(argv[2]);
+    printf("TRANSPOSITION TIME EVALUATION --- THREADS: %d\n", n_threads);
     for (int s = 0; s < 9; s++) {
         int n = sizes[s];
         double total_t_time = 0.0;
@@ -102,42 +104,43 @@ int main() {
         }
         printf("Matrix size: %d, time: %.6f ms\n", sizes[s], total_t_time / 100);
     }
-    printf("\nSYMMETRY CHECK TIME EVALUATION\n");
-    for (int s = 0; s < 9; s++) {
-        int n = sizes[s];
-        double total_s_time = 0.0;
+    if (symmetry_check == 1) {
+        printf("\nSYMMETRY CHECK TIME EVALUATION\n");
+        for (int s = 0; s < 9; s++) {
+            int n = sizes[s];
+            double total_s_time = 0.0;
 
-        for (int z = 0; z < 3; z++) {
-            float **matrix = (float **)malloc(n * sizeof(float *));
-            float **transpose = (float **)malloc(n * sizeof(float *));
-            for (int i = 0; i < n; i++) {
-                matrix[i] = (float *)malloc(n * sizeof(float));
-                transpose[i] = (float *)malloc(n * sizeof(float));
+            for (int z = 0; z < 3; z++) {
+                float **matrix = (float **)malloc(n * sizeof(float *));
+                float **transpose = (float **)malloc(n * sizeof(float *));
+                for (int i = 0; i < n; i++) {
+                    matrix[i] = (float *)malloc(n * sizeof(float));
+                    transpose[i] = (float *)malloc(n * sizeof(float));
+                }
+
+                initializeMatrixAsym(matrix, n);
+
+                struct timeval start_time, end_time;
+
+                gettimeofday(&start_time, NULL);
+                int isSymmetric = checkSymOMP(matrix, n);
+                gettimeofday(&end_time, NULL);
+
+                long seconds = end_time.tv_sec - start_time.tv_sec;
+                long microseconds = end_time.tv_usec - start_time.tv_usec;
+                double time_diff = (seconds * 1000.0) + (microseconds / 1000.0);
+
+                total_s_time += time_diff;
+
+                for (int i = 0; i < n; i++) {
+                    free(matrix[i]);
+                    free(transpose[i]);
+                }
+                free(matrix);
+                free(transpose);
             }
-
-            initializeMatrixAsym(matrix, n);
-
-            struct timeval start_time, end_time;
-
-            gettimeofday(&start_time, NULL);
-            int isSymmetric = checkSymOMP(matrix, n);
-            gettimeofday(&end_time, NULL);
-
-            long seconds = end_time.tv_sec - start_time.tv_sec;
-            long microseconds = end_time.tv_usec - start_time.tv_usec;
-            double time_diff = (seconds * 1000.0) + (microseconds / 1000.0);
-
-            total_s_time += time_diff;
-
-            for (int i = 0; i < n; i++) {
-                free(matrix[i]);
-                free(transpose[i]);
-            }
-            free(matrix);
-            free(transpose);
+            printf("Matrix size: %d, time: %.6f ms\n", sizes[s], total_s_time / 100);
         }
-        printf("Matrix size: %d, time: %.6f ms\n", sizes[s], total_s_time / 100);
     }
-
     return 0;
 }

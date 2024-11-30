@@ -52,9 +52,6 @@ ECHO.
 ECHO Running OpenMP Approach with 16 threads
 .\exec\03_transposition_par_openmp 16 0
 ECHO.
-ECHO Running OpenMP Approach with 32 threads
-.\exec\03_transposition_par_openmp 32 0
-ECHO.
 
 REM Job completed
 ECHO All tasks completed successfully.

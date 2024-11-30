@@ -26,27 +26,44 @@ gcc --version
 # SET WORKING DIRECTORY
 cd /home/daniele.pedrolli/ex/cluster_code
 
+mkdir -p exec
+
 ############################
 ## COMPILATION AND RUNNIG ##
 ############################
 
-# Sequential approach
+# Compile and run the Sequential Approach
+echo "Compiling and running the Sequential Approach"
+echo "==============================================="
 gcc 01_transposition_sequential.c -o ./exec/01_transposition_sequential
-echo -e "\n=====\n"
-echo "SEQUENTIAL APPROACH"
-./exec/01_transposition_sequential.out
-echo -e "\n\n"
+./exec/01_transposition_sequential
+echo ""
 
-# Implicit approach
+# Compile and run the Implicit Parallelism Approach
+echo "Compiling and running the Implicit Parallelism Approach"
+echo "========================================================"
 gcc -O2 -march=native 02_transposition_par_implicit.c -o ./exec/02_transposition_par_implicit
-echo -e "\n=====\n"
-echo "IMPLICIT APPROACH"
-./exec/02_transposition_par_implicit.out
-echo -e "\n\n"
+./exec/02_transposition_par_implicit
+echo ""
 
-# OpenMP approach
+# Compile and run the OpenMP Approach
+echo "Compiling and running the OpenMP Approach"
+echo "=========================================="
 gcc -O3 -fopenmp 03_transposition_par_openmp.c -o ./exec/03_transposition_par_openmp
-echo -e "\n=====\n"
-echo "OPENMP APPROACH"
-./exec/03_transposition_par_openmp.out
-echo -e "\n\n"
+
+echo "Running OpenMP Approach with 1 thread"
+./exec/03_transposition_par_openmp 1 1
+echo ""
+echo "Running OpenMP Approach with 2 threads"
+./exec/03_transposition_par_openmp 1 0
+echo ""
+echo "Running OpenMP Approach with 4 threads"
+./exec/03_transposition_par_openmp 1 0
+echo ""
+echo "Running OpenMP Approach with 8 threads"
+./exec/03_transposition_par_openmp 1 0
+echo ""
+echo "Running OpenMP Approach with 16 threads"
+./exec/03_transposition_par_openmp 1 0
+echo ""
+
