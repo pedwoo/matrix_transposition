@@ -9,42 +9,24 @@ void initializeMatrix(float **matrix, int n) {
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < n; j++) {
             matrix[i][j] = (float)rand() / RAND_MAX * 100;
+            matrix[j][i] = matrix[i][j];
         }
     }
 }
 
 int checkSymImp(float **matrix, int n) {
+    const float epsilon = 1e-6;
+    int isSymmetric = 1;
+
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < i; j++) {
-            if (matrix[i][j] != matrix[j][i]) {
-                return 0;
+            if (isSymmetric && fabsf(matrix[i][j] - matrix[j][i]) > epsilon) {
+                isSymmetric = 0;
             }
         }
     }
-    // int blockSize = 32;
 
-    // for (int i = 0; i < n; i += blockSize) {
-    //     for (int j = i; j < n; j += blockSize) {
-    //         int maxI = (i + blockSize > n) ? n : i + blockSize;
-    //         int maxJ = (j + blockSize > n) ? n : j + blockSize;
-
-    //         for (int ii = i; ii < maxI; ++ii) {
-    //             for (int jj = (ii == i ? j : i); jj < maxJ; jj += 4) {
-    //                 if (jj + 4 <= maxJ) {
-    //                     __m128 rowElems = _mm_loadu_ps(&matrix[ii][jj]);
-    //                     __m128 colElems = _mm_set_ps(matrix[jj + 3][ii], matrix[jj + 2][ii], matrix[jj + 1][ii], matrix[jj][ii]);
-    //                     __m128 cmp = _mm_cmpeq_ps(rowElems, colElems);
-
-    //                     if (_mm_movemask_ps(cmp) != 0xF) {
-    //                         return 0;
-    //                     }
-    //                 }
-    //             }
-    //         }
-    //     }
-    // }
-
-    return 1;
+    return isSymmetric;
 }
 
 void matTransposeImp(float **matrix, float **transposed, int n) {

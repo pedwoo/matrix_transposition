@@ -1,19 +1,21 @@
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <sys/time.h>
+#include <time.h>
+#include <windows.h>
 #include <xmmintrin.h>
 
 void initializeMatrixAsym(float **matrix, int n) {
     for (int i = 0; i < n; i++) {
-        for (int j = 0; j <= i; j++) {
+        for (int j = 0; j < n; j++) {
             matrix[i][j] = (float)rand() / RAND_MAX * 100;
         }
     }
 }
+
 void initializeMatrixSym(float **matrix, int n) {
     for (int i = 0; i < n; i++) {
-        for (int j = i; j < n; j++) {
+        for (int j = 0; j < i; j++) {
             matrix[i][j] = (float)rand() / RAND_MAX * 100;
             matrix[j][i] = matrix[i][j];
         }
@@ -62,7 +64,7 @@ int main() {
         int n = sizes[s];
         double total_t_time = 0.0;
 
-        for (int z = 0; z < 3; z++) {
+        for (int z = 0; z < 100; z++) {
             float **matrix = (float **)malloc(n * sizeof(float *));
             float **transpose = (float **)malloc(n * sizeof(float *));
             for (int i = 0; i < n; i++) {
@@ -71,16 +73,15 @@ int main() {
             }
 
             initializeMatrixAsym(matrix, n);
+            LARGE_INTEGER frequency, start_time, end_time;
+            double time_diff;
 
-            struct timeval start_time, end_time;
+            QueryPerformanceFrequency(&frequency);
 
-            gettimeofday(&start_time, NULL);
+            QueryPerformanceCounter(&start_time);
             matTransposeImp(matrix, transpose, n);
-            gettimeofday(&end_time, NULL);
-
-            long seconds = end_time.tv_sec - start_time.tv_sec;
-            long microseconds = end_time.tv_usec - start_time.tv_usec;
-            double time_diff = (seconds * 1000.0) + (microseconds / 1000.0);
+            QueryPerformanceCounter(&end_time);
+            time_diff = (double)(end_time.QuadPart - start_time.QuadPart) * 1000.0 / frequency.QuadPart;
 
             total_t_time += time_diff;
 
@@ -98,7 +99,7 @@ int main() {
         int n = sizes[s];
         double total_s_time = 0.0;
 
-        for (int z = 0; z < 3; z++) {
+        for (int z = 0; z < 100; z++) {
             float **matrix = (float **)malloc(n * sizeof(float *));
             float **transpose = (float **)malloc(n * sizeof(float *));
             for (int i = 0; i < n; i++) {
@@ -108,15 +109,15 @@ int main() {
 
             initializeMatrixAsym(matrix, n);
 
-            struct timeval start_time, end_time;
+            LARGE_INTEGER frequency, start_time, end_time;
+            double time_diff;
 
-            gettimeofday(&start_time, NULL);
+            QueryPerformanceFrequency(&frequency);
+
+            QueryPerformanceCounter(&start_time);
             int isSymmetric = checkSymImp(matrix, n);
-            gettimeofday(&end_time, NULL);
-
-            long seconds = end_time.tv_sec - start_time.tv_sec;
-            long microseconds = end_time.tv_usec - start_time.tv_usec;
-            double time_diff = (seconds * 1000.0) + (microseconds / 1000.0);
+            QueryPerformanceCounter(&end_time);
+            time_diff = (double)(end_time.QuadPart - start_time.QuadPart) * 1000.0 / frequency.QuadPart;
 
             total_s_time += time_diff;
 

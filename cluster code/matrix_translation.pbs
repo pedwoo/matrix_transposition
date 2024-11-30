@@ -1,0 +1,52 @@
+#!/bin/bash
+
+# Job name
+#PBS -N matrix_transposition
+
+# Output files
+#PBS -o ./MainScriptOutput.o
+#PBS -e ./MainScriptErrors.e
+
+# Queue name
+#PBS -q short_cpuQ
+
+# Set the maximum wall time
+#PBS -l walltime=01:00:00
+
+# Number of nodes, cpus, mpi processors and amount of memory
+#PBS -l select=1:ncpus=32:mem=1gb
+
+# Modules for C
+module load gcc91
+gcc() {
+    gcc-9.1.0 "$@"
+}
+gcc --version
+
+# SET WORKING DIRECTORY
+cd /home/daniele.pedrolli/ex/cluster_code
+
+############################
+## COMPILATION AND RUNNIG ##
+############################
+
+# Sequential approach
+gcc 01_transposition_sequential.c -o ./exec/01_transposition_sequential
+echo -e "\n=====\n"
+echo "SEQUENTIAL APPROACH"
+./exec/01_transposition_sequential.out
+echo -e "\n\n"
+
+# Implicit approach
+gcc -O2 -march=native 02_transposition_par_implicit.c -o ./exec/02_transposition_par_implicit
+echo -e "\n=====\n"
+echo "IMPLICIT APPROACH"
+./exec/02_transposition_par_implicit.out
+echo -e "\n\n"
+
+# OpenMP approach
+gcc -O3 -fopenmp 03_transposition_par_openmp.c -o ./exec/03_transposition_par_openmp
+echo -e "\n=====\n"
+echo "OPENMP APPROACH"
+./exec/03_transposition_par_openmp.out
+echo -e "\n\n"

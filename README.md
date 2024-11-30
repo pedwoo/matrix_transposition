@@ -100,7 +100,7 @@ Approaching matrix transposition from a sequential point of view is an almost tr
 The compilation command, which is in line with the structure of the repository (found [Here](https://github.com/pedwoo/matrix_transposition.git)) follows:
 
 ```
-gcc 01_transposition_sequential.c -o ./exec/01_transposition_sequential.exe
+gcc 01_transposition_sequential.c -o ./exec/01_transposition_sequential
 ```
 
 Also to be noted is the method of registering times, for which we use `QueryPerformanceCounter`. This is a way of measuring time based on the clock frequency of the CPU, rather than a more commong wall clock, thus achieving higher precision, especially when working with very short times.
@@ -128,7 +128,7 @@ A note has to be made about the symmetry check function (`checkSymImp`): this fu
 The compilation command, which is in line with the structure of the repository (found [Here](https://github.com/pedwoo/matrix_transposition.git)) follows:
 
 ```
-gcc -O2 -march=native 02_transposition_par_implicit.c -o ./exec/02_transposition_par_implicit.exe
+gcc -O2 -march=native 02_transposition_par_implicit.c -o ./exec/02_transposition_par_implicit
 ```
 
 This is the combination of compiler flags/code optimization that returned the best performance increase ([Results here](#51-experimental-times-per-approach-and-matrix-size)). A brief explanation of the flags used follows:
@@ -181,7 +181,7 @@ $$
 Computing this allows us two ways to approach the calculation of the effective memory bandwidth utilization (U) for each of the solution proposed: one way is to compute the ratio between the theoretical and experimental times (a), while the other is the ratio of experimental data transfer and what peak bandwidth would allow in that same amount of time (b)
 
 $$
-\text{(a)}~~\text{U}=\frac{\text{Experimental time}}{\text{Theoretical time}}\times 100
+\text{(a)}~~\text{U}=\frac{\text{Theoretical time}}{\text{Experimental time}}\times 100
 $$
 
 $$
@@ -374,7 +374,7 @@ We can now also compare the three approaches in terms of speedup. By using the s
 We can compute the speedup using the formula that follows. Note that `Test time` represents the time for which we want to calculate the speedup:
 
 $$
-\text{Speedup (\%)}=\frac{\text{Baseline time - Test time}}{\text{Baseline time}}\times100
+\text{Speedup}=\frac{\text{Baseline time - Test time}}{\text{Baseline time}}\times100
 $$
 
 The results per approach and matrix size follow.

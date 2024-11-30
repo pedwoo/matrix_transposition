@@ -9,43 +9,49 @@
 void initializeMatrix(float **matrix, int n) {
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < n; j++) {
-            // matrix[i][j] = (float)rand() / RAND_MAX * 100;
-            matrix[i][j] = 1.0;
+            matrix[i][j] = (float)rand() / RAND_MAX * 100;
+            matrix[j][i] = matrix[i][j];
         }
     }
 }
 
 int checkSymOMP(float **matrix, int n) {
-    float tolerance = 1e-6;  // Tolerance for floating-point comparison
+    const float epsilon = 1e-6;
+    int isSymmetric = 1;
 
+#pragma omp parallel for schedule(static) collapse(1) shared(isSymmetric)
     for (int i = 0; i < n; i++) {
-        for(int j = 0; j < i; j++) {
-            if (fabs(matrix[i][j] - matrix[j][i]) > tolerance) {
-                return 0;
+        for (int j = 0; j < i; j++) {
+            if (isSymmetric && fabsf(matrix[i][j] - matrix[j][i]) > epsilon) {
+#pragma omp atomic write
+                isSymmetric = 0;
             }
         }
     }
-    return 1;
+
+    return isSymmetric;
 }
 
 void matTransposeOMP(float **matrix, float **transposed, int n) {
-    int blockSize = 32;  // Block size for cache optimization
+    int blockSize = 32;
 
-    // Parallelize the outer loops
-    #pragma omp parallel for collapse(2)
-    for (int i = 0; i < n; i++) {
-        for (int j = 0; j < n; j++) {
-            transposed[j][i] = matrix[i][j];
-            // // Limit the blocks to the actual size of the matrix
-            // int maxI = i + blockSize > n ? n : i + blockSize;
-            // int maxJ = j + blockSize > n ? n : j + blockSize;
+#pragma omp parallel for collapse(2)
+    for (int i = 0; i < n; i += blockSize) {
+        for (int j = 0; j < n; j += blockSize) {
+            int maxI = i + blockSize > n ? n : i + blockSize;
+            int maxJ = j + blockSize > n ? n : j + blockSize;
 
-            // // Transpose the submatrix
-            // for (int ii = i; ii < maxI; ++ii) {
-            //     for (int jj = j; jj < maxJ; ++jj) {
-            //         transposed[jj][ii] = matrix[ii][jj];
-            //     }
-            // }
+            for (int ii = i; ii < maxI; ++ii) {
+                for (int jj = j; jj < maxJ; ++jj) {
+                    if (jj + 1 < maxJ) {
+                        _mm_prefetch((float *)&matrix[ii][jj + 1], _MM_HINT_T0);
+                    }
+                    if (ii + 1 < maxI) {
+                        _mm_prefetch((float *)&matrix[ii + 1][j], _MM_HINT_T0);
+                    }
+                    transposed[jj][ii] = matrix[ii][jj];
+                }
+            }
         }
     }
 }

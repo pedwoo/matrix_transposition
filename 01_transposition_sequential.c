@@ -1,3 +1,4 @@
+#include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
@@ -12,14 +13,17 @@ void initializeMatrix(float **matrix, int n) {
 }
 
 int checkSym(float **matrix, int n) {
+    const float epsilon = 1e-6;
+    int isSymmetric = 1;
+
     for (int i = 0; i < n; i++) {
-        for (int j = 0; j < n; j++) {
-            if (matrix[i][j] != matrix[j][i]) {
-                return 0;
+        for (int j = 0; j < i; j++) {
+            if (isSymmetric && fabsf(matrix[i][j] - matrix[j][i]) > epsilon) {
+                isSymmetric = 0;
             }
         }
     }
-    return 1;
+    return isSymmetric;
 }
 
 void matTranspose(float **matrix, float **transpose, int n) {
