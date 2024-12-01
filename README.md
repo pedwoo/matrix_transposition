@@ -175,7 +175,7 @@ We can now take a brief look at what the system we perform the experiments on co
 
 For DDR type memory, bandwidth can be simply computed as:
 
-<img style="display:block;margin:0 auto 10px;" src="https://latex.codecogs.com/png.image?\dpi{110}\fg{white}\text{Memory&space;bandwdith}=\text{Memory&clock&space;speed}\times\text{Memory&space;bus&space;width}\times\text{Number&space;of&space;channels}"/>
+<img style="display:block;margin:0 auto 10px;" src="https://latex.codecogs.com/png.image?\dpi{110}\fg{white}\text{Memory&space;bandwdith}=\text{Memory&space;clock&space;speed}\times\text{Memory&space;bus&space;width}\times\text{Number&space;of&space;channels}"/>
 
 <img style="display:block;margin:0 auto 10px" src="https://latex.codecogs.com/png.image?\dpi{110}\fg{white}\text{Memory&space;bandwidth}=6400\times10^6\times32\times4=819.2\text{Gbps}=102.4\text{GBps}"/>
 
@@ -187,7 +187,7 @@ With this number in mind, we can go on to compute the theoretical times it would
 Computing this allows us two ways to approach the calculation of the effective memory bandwidth utilization (U) for each of the solution proposed: one way is to compute the ratio between the theoretical and experimental times (a), while the other is the ratio of experimental data transfer and what peak bandwidth would allow in that same amount of time (b)
 
 <img style="display:block;margin:0 auto 10px" src="https://latex.codecogs.com/png.image?\dpi{110}\fg{white}\text{(a)}\text{U}=\frac{\text{Theoretical&space;time}}{\text{Experimental&space;time}}\times100"/>
-<img style="display:block;margin:0 auto 10px" src="https://latex.codecogs.com/png.image?\dpi{110}\fg{white}\text{(b)}\text{U}=\frac{\text{Total&space;data&space;transfer}}{\text{Experimental&space;time}\times\text{Peak bandwidth}}\times100"/>
+<img style="display:block;margin:0 auto 10px" src="https://latex.codecogs.com/png.image?\dpi{110}\fg{white}\text{(b)}\text{U}=\frac{\text{Total&space;data&space;transfer}}{\text{Experimental&space;time}\times\text{Peak&space;bandwidth}}\times100"/>
 
 ## 5. Results
 
