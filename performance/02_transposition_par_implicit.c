@@ -115,7 +115,7 @@ int main() {
             QueryPerformanceFrequency(&frequency);
 
             QueryPerformanceCounter(&start_time);
-            int isSymmetric = checkSymImp(matrix, n);
+            volatile int isSymmetric = checkSymImp(matrix, n);
             QueryPerformanceCounter(&end_time);
             time_diff = (double)(end_time.QuadPart - start_time.QuadPart) * 1000.0 / frequency.QuadPart;
 

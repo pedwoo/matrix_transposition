@@ -29,10 +29,17 @@ int checkSymOMP(float **matrix, int n, int n_threads) {
     int isSymmetric = 1;
 
     omp_set_num_threads(n_threads);
+
+#pragma omp parallel for shared(isSymmetric)
     for (int i = 0; i < n; i++) {
-        for (int j = 0; j < i; j++) {
-            if (isSymmetric && fabsf(matrix[i][j] - matrix[j][i]) > epsilon) {
-                isSymmetric = 0;
+        for (int j = 0; j < i; j += 16) {
+            int end = (j + 16 < i) ? j + 16 : i;
+
+            for (int jj = j; jj < end; jj++) {
+                if (isSymmetric && fabsf(matrix[i][jj] - matrix[jj][i]) > epsilon) {
+#pragma omp critical
+                    isSymmetric = 0;
+                }
             }
         }
     }
@@ -126,7 +133,7 @@ int main(int argc, char *argv[]) {
                 QueryPerformanceFrequency(&frequency);
 
                 QueryPerformanceCounter(&start_time);
-                int isSymmetric = checkSymOMP(matrix, n, 1);
+                volatile int isSymmetric = checkSymOMP(matrix, n, n_threads);
                 QueryPerformanceCounter(&end_time);
                 time_diff = (double)(end_time.QuadPart - start_time.QuadPart) * 1000.0 / frequency.QuadPart;
 

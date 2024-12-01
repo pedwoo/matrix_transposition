@@ -22,16 +22,22 @@ void initializeMatrixSym(float **matrix, int n) {
     }
 }
 
-int checkSymOMP(float **matrix, int n) {
+int checkSymOMP(float **matrix, int n, int n_threads) {
     const float epsilon = 1e-6;
     int isSymmetric = 1;
 
-#pragma omp parallel for schedule(static) collapse(1) shared(isSymmetric)
+    omp_set_num_threads(n_threads);
+
+#pragma omp parallel for shared(isSymmetric)
     for (int i = 0; i < n; i++) {
-        for (int j = 0; j < i; j++) {
-            if (isSymmetric && fabsf(matrix[i][j] - matrix[j][i]) > epsilon) {
-#pragma omp atomic write
-                isSymmetric = 0;
+        for (int j = 0; j < i; j += 16) {
+            int end = (j + 16 < i) ? j + 16 : i;
+
+            for (int jj = j; jj < end; jj++) {
+                if (isSymmetric && fabsf(matrix[i][jj] - matrix[jj][i]) > epsilon) {
+#pragma omp critical
+                    isSymmetric = 0;
+                }
             }
         }
     }
@@ -86,7 +92,7 @@ int main(int argc, char *argv[]) {
             struct timeval start_time, end_time;
 
             gettimeofday(&start_time, NULL);
-            matTransposeOMP(matrix, transpose, n);
+            matTransposeOMP(matrix, transpose, n, n_threads);
             gettimeofday(&end_time, NULL);
 
             long seconds = end_time.tv_sec - start_time.tv_sec;
@@ -123,7 +129,7 @@ int main(int argc, char *argv[]) {
                 struct timeval start_time, end_time;
 
                 gettimeofday(&start_time, NULL);
-                int isSymmetric = checkSymOMP(matrix, n);
+                volatile int isSymmetric = checkSymOMP(matrix, n, n_threads);
                 gettimeofday(&end_time, NULL);
 
                 long seconds = end_time.tv_sec - start_time.tv_sec;

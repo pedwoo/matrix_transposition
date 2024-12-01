@@ -4,8 +4,8 @@
 #PBS -N matrix_transposition
 
 # Output files
-#PBS -o ./MainScriptOutput.o
-#PBS -e ./MainScriptErrors.e
+#PBS -o ./matrix_translation_output.o
+#PBS -e ./matrix_translation_errors.e
 
 # Queue name
 #PBS -q short_cpuQ
@@ -14,7 +14,7 @@
 #PBS -l walltime=01:00:00
 
 # Number of nodes, cpus, mpi processors and amount of memory
-#PBS -l select=1:ncpus=32:mem=1gb
+#PBS -l select=1:ncpus=96:mem=4gb
 
 # Modules for C
 module load gcc91

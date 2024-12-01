@@ -111,7 +111,7 @@ int main() {
             struct timeval start_time, end_time;
 
             gettimeofday(&start_time, NULL);
-            int isSymmetric = checkSymImp(matrix, n);
+            volatile int isSymmetric = checkSymImp(matrix, n);
             gettimeofday(&end_time, NULL);
 
             long seconds = end_time.tv_sec - start_time.tv_sec;
