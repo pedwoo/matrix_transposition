@@ -145,11 +145,26 @@ This is the combination of compiler flags/code optimization that returned the be
 
 ### 3.3 Parallelism through OpenMP
 
+Further performance optimization can be reached by using OpenMP. An overview of the techniques used in the experiment follows, starting from the matrix transposition:
+
+-   Like before, the matrix is split up into blocks based on a `blockSize`, which is optimized based on the amount of L1 cache (256KB in this case). Each block is then transposed independently of the others, in order to improve memory access patterns as well
+-   Once the block boundaries are defined, the transposition starts, with the exception that, if possible, the next element to be processed is prefetched in the previous iteration (this obviously excludes the very first iteration), so that both the next row of the base matrix and the next column of the transposed matrix are already present in memory, reducing the access time to the memory and also avoiding any cache misses that could occur
+-   Ultimately, using the directive `#pragma omp parallel for collapse(2)`, we specify that the two outermost loops should be combined into a single iteration space (they are treated as if they belong to one flat, linear loop), and then divided among the threads available
+-   It is to be noted that in this specific approach also the function signature is different, as it also includes a `n_threads` argument which is used to dynamically set the number of threads used by OpenMP
+
 The compilation command, which is in line with the structure of the repository (found [Here](https://github.com/pedwoo/matrix_transposition.git)) follows:
 
 ```
+gcc -O3 -fopenmp 03_transposition_par_openmp.c -o ./exec/03_transposition_par_openmp
+```
+
+The running command in this case is also different, as the number of threads to be used has to be specified on the running command itself
 
 ```
+.\exec\03_transposition_par_openmp <n_threads>
+```
+
+When running the script in the `performance` folder of the repository, a `<symmetry check>` flag has to be specified after the number of threads, to decide whether the symmetry check performance has to be evaluated as well or not.
 
 ## 4. Experiments and system description
 

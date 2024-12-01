@@ -15,10 +15,11 @@ void initializeMatrix(float **matrix, int n) {
     }
 }
 
-int checkSymOMP(float **matrix, int n) {
+int checkSymOMP(float **matrix, int n, int n_threads) {
     const float epsilon = 1e-6;
     int isSymmetric = 1;
 
+    omp_set_num_threads(n_threads);
 #pragma omp parallel for schedule(static) collapse(1) shared(isSymmetric)
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < i; j++) {
@@ -32,9 +33,10 @@ int checkSymOMP(float **matrix, int n) {
     return isSymmetric;
 }
 
-void matTransposeOMP(float **matrix, float **transposed, int n) {
+void matTransposeOMP(float **matrix, float **transposed, int n, int n_threads) {
     int blockSize = 32;
 
+    omp_set_num_threads(n_threads);
 #pragma omp parallel for collapse(2)
     for (int i = 0; i < n; i += blockSize) {
         for (int j = 0; j < n; j += blockSize) {
@@ -56,7 +58,8 @@ void matTransposeOMP(float **matrix, float **transposed, int n) {
     }
 }
 
-int main() {
+int main(int argc, char *argv[]) {
+    int n_threads = atoi(argv[1]);
     int n;
     printf("Enter the size of the matrix: ");
     scanf("%d", &n);
@@ -89,7 +92,7 @@ int main() {
 
     // Performance evaluation of symmetric check
     QueryPerformanceCounter(&start_time);
-    int isSymmetric = checkSymOMP(matrix, n);
+    int isSymmetric = checkSymOMP(matrix, n, n_threads);
     QueryPerformanceCounter(&end_time);
     time_diff = (double)(end_time.QuadPart - start_time.QuadPart) * 1000.0 / frequency.QuadPart;
     printf("Time to check symmetry: %.4f ms ==> ", time_diff);
@@ -97,7 +100,7 @@ int main() {
 
     // Performance evaluation of matrix transpose
     QueryPerformanceCounter(&start_time);
-    matTransposeOMP(matrix, transpose, n);
+    matTransposeOMP(matrix, transpose, n, n_threads);
     QueryPerformanceCounter(&end_time);
     time_diff = (double)(end_time.QuadPart - start_time.QuadPart) * 1000.0 / frequency.QuadPart;
     printf("Time to transpose: %.4f ms\n", time_diff);
