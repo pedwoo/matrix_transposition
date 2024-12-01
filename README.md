@@ -182,7 +182,7 @@ For DDR type memory, bandwidth can be simply computed as:
 Sadly, even though the RAM works in a 4-channel configuration, the CPU only allows for dual-channel memory access, effectively cutting in half the usable bandwidth. The value used in calculations will therefore be $51.2\text{GBps}$, even through a more powerful CPU would allow the use of the entire memory bandwidth.  
 With this number in mind, we can go on to compute the theoretical times it would take to transpose each size of matrix supposing full memory bandwidth utilization. The formula follows:
 
-<img style="display:block;margin:0 auto 10px" src="https://latex.codecogs.com/png.image?\dpi{110}\fg{white}\text{t}=\frac{\text{Total&space;data&space;transfer}}{\text{Memory&space;bandwidth}}"/>
+<img style="display:block;margin:0 auto 10px" src="https://latex.codecogs.com/png.image?\dpi{110}\fg{white}\text{Theoretical&space;time}=\frac{\text{Total&space;data&space;transfer}}{\text{Memory&space;bandwidth}}"/>
 
 Computing this allows us two ways to approach the calculation of the effective memory bandwidth utilization (U) for each of the solution proposed: one way is to compute the ratio between the theoretical and experimental times (a), while the other is the ratio of experimental data transfer and what peak bandwidth would allow in that same amount of time (b)
 
