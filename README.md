@@ -202,8 +202,8 @@ The results for each matrix size and approach follows. These results were obtain
         <th><strong>Matrix Size</strong></th>
         <th><strong>Sequential (ms)</strong></th>
         <th><strong>Implicit (ms)</strong></th>
-        <th><strong>OpenMP 1th (ms)</strong></th>
-        <th><strong>OpenMP 16th (ms)</strong></th>
+        <th><strong>OpenMP 1t (ms)</strong></th>
+        <th><strong>OpenMP 16t (ms)</strong></th>
     </thead>
     <tbody>
         <tr>
@@ -280,8 +280,8 @@ The results for each matrix size and approach follows. These results were obtain
         <th><strong>Matrix Size</strong></th>
         <th><strong>Sequential (ms)</strong></th>
         <th><strong>Implicit (ms)</strong></th>
-        <th><strong>OpenMP 1th (ms)</strong></th>
-        <th><strong>OpenMP 16th (ms)</strong></th>
+        <th><strong>OpenMP 1t (ms)</strong></th>
+        <th><strong>OpenMP 16t (ms)</strong></th>
     </thead>
     <tbody>
         <tr>
@@ -742,86 +742,96 @@ Some observations can be done after looking at the data provided.
 The following table contains the memory bandwidth utilization for each approach and matrix size, computed using the formulae above.
 
 <table border="1" style="margin:auto">
-    <thead>
-        <th><strong>Matrix Size</strong></th>
-        <th><strong>Data (MB)</strong></th>
-        <th><strong>Ideal time (ms)</strong></th>
-        <th><strong>Sequential (%)</strong></th>
-        <th><strong>Implicit (%)</strong></th>
-        <th><strong>OpenMP (%)</strong></th>
+  <thead>
+    <th><strong>Matrix size</strong></th>
+    <th><strong>Data (MB)</strong></th>
+    <th><strong>Ideal time (ms)</strong></th>
+    <th><strong>Sequential (%)</strong></th>
+    <th><strong>Implicit (%)</strong></th>
+    <th><strong>OpenMP 1t (%)</strong></th>
+    <th><strong>OpenMP 16t (%)</strong></th>
   </thead>
   <tbody>
     <tr>
-        <td>16x16</td>
-        <td>0.002</td>
-        <td>0.000037</td>
-        <td>8.063</td>
-        <td>37.253</td>
-        <td>0.042</td>
+      <td>16x16</td>
+      <td>0.002</td>
+      <td>0.000039</td>
+      <td>9.06</td>
+      <td>28.72</td>
+      <td>0.35</td>
+      <td>0.05</td>
     </tr>
     <tr>
-        <td>32x32</td>
-        <td>0.008</td>
-        <td>0.000149</td>
-        <td>8.050</td>
-        <td>63.141</td>
-        <td>0.153</td>
+      <td>32x32</td>
+      <td>0.008</td>
+      <td>0.000156</td>
+      <td>11.59</td>
+      <td>50.90</td>
+      <td>1.40</td>
+      <td>0.22</td>
     </tr>
     <tr>
-        <td>64x64</td>
-        <td>0.032</td>
-        <td>0.000596</td>
-        <td>7.657</td>
-        <td>79.899</td>
-        <td>0.628</td>
+      <td>64x64</td>
+      <td>0.032</td>
+      <td>0.000624</td>
+      <td>11.07</td>
+      <td>55.31</td>
+      <td>4.31</td>
+      <td>0.85</td>
     </tr>
     <tr>
-        <td>128x128</td>
-        <td>0.128</td>
-        <td>0.002384</td>
-        <td>7.423</td>
-        <td>49.691</td>
-        <td>2.428</td>
+      <td>128x128</td>
+      <td>0.128</td>
+      <td>0.002500</td>
+      <td>10.01</td>
+      <td>48.63</td>
+      <td>12.09</td>
+      <td>3.19</td>
     </tr>
     <tr>
-        <td>256x256</td>
-        <td>0.512</td>
-        <td>0.009537</td>
-        <td>7.407</td>
-        <td>66.556</td>
-        <td>8.085</td>
+      <td>256x256</td>
+      <td>0.512</td>
+      <td>0.010000</td>
+      <td>10.05</td>
+      <td>39.81</td>
+      <td>15.42</td>
+      <td>10.12</td>
     </tr>
     <tr>
-        <td>512x512</td>
-        <td>2</td>
-        <td>0.038147</td>
-        <td>8.488</td>
-        <td>39.095</td>
-        <td>23.528</td>
+      <td>512x512</td>
+      <td>2</td>
+      <td>0.0390625</td>
+      <td>9.61</td>
+      <td>29.02</td>
+      <td>15.51</td>
+      <td>25.88</td>
     </tr>
     <tr>
-        <td>1024x1024</td>
-        <td>8</td>
-        <td>0.152588</td>
-        <td>5.470</td>
-        <td>25.588</td>
-        <td>34.612</td>
+      <td>1024x1024</td>
+      <td>16</td>
+      <td>0.312500</td>
+      <td>11.74</td>
+      <td>45.67</td>
+      <td>21.99</td>
+      <td>84.53</td>
     </tr>
     <tr>
-        <td>2048x2048</td>
-        <td>32</td>
-        <td>0.610352</td>
-        <td>4.130</td>
-        <td>13.642</td>
-        <td>19.470</td>
+      <td>2048x2048</td>
+      <td>64</td>
+      <td>1.250000</td>
+      <td>8.02</td>
+      <td>23.64</td>
+      <td>12.61</td>
+      <td>39.60</td>
     </tr>
     <tr>
-        <td>4096x4096</td>
-        <td>128</td>
-        <td>2.441406</td>
-        <td>3.380</td>
-        <td>9.853</td>
-        <td>18.326</td>
+      <td>4096x4096</td>
+      <td>128</td>
+      <td>2.500000</td>
+      <td>3.25</td>
+      <td>9.51</td>
+      <td>5.37</td>
+      <td>20.17</td>
     </tr>
   </tbody>
 </table>
@@ -831,76 +841,95 @@ The following table contains the memory bandwidth utilization for each approach 
 We can now also compare the three approaches in terms of speedup. By using the sequential approach as a baseline, we can express in percentage how much faster each of the other approaches are, per matrix size.  
 We can compute the speedup using the formula that follows. Note that `Test time` represents the time for which we want to calculate the speedup:
 
-<img style="display:block;margin:auto" src="https://latex.codecogs.com/png.image?\dpi{110}\fg{white}\text{Speedup}=\frac{\text{Baseline&space;time-Test&space;time}}{\text{Baseline&space;time}}\times100"/>
+<img style="display:block;margin:auto" src="https://latex.codecogs.com/png.image?\dpi{110}\fg{white}\text{Speedup}=\frac{\text{Baseline&space;time}}{\text{Test&space;time}}\times100"/>
 
 The results per approach and matrix size follow.
 
 <table border="1" style="margin:auto">
-    <thead>
-        <th>Matrix Size</th>
-        <th>Sequential Time (ms)</th>
-        <th>Implicit Speedup (%)</th>
-        <th>OpenMP Speedup (%)</th>
-    </thead>
-    <tbody>
-        <tr>
-            <td>16x16</td>
-            <td>0.000462</td>
-            <td>462</td>
-            <td>0.52</td>
-        </tr>
-        <tr>
-            <td>32x32</td>
-            <td>0.001851</td>
-            <td>784</td>
-            <td>1.91</td>
-        </tr>
-        <tr>
-            <td>64x64</td>
-            <td>0.007784</td>
-            <td>1046</td>
-            <td>8.20</td>
-        </tr>
-        <tr>
-            <td>128x128</td>
-            <td>0.032118</td>
-            <td>670</td>
-            <td>32.70</td>
-        </tr>
-        <tr>
-            <td>256x256</td>
-            <td>0.128760</td>
-            <td>899</td>
-            <td>109.23</td>
-        </tr>
-        <tr>
-            <td>512x512</td>
-            <td>0.449411</td>
-            <td>460</td>
-            <td>277.41</td>
-        </tr>
-        <tr>
-            <td>1024x1024</td>
-            <td>2.789407</td>
-            <td>468</td>
-            <td>632.54</td>
-        </tr>
-        <tr>
-            <td>2048x2048</td>
-            <td>14.779019</td>
-            <td>331</td>
-            <td>471.50</td>
-        </tr>
-        <tr>
-            <td>4096x4096</td>
-            <td>72.229659</td>
-            <td>293</td>
-            <td>542.61</td>
-        </tr>
-    </tbody>
+  <thead>
+    <th><strong>Matrix Size</strong></th>
+    <th><strong>Sequential (ms)</strong></th>
+    <th><strong>Implicit (%)</strong></th>
+    <th><strong>OpenMP 1t (%)</strong></th>
+    <th><strong>OpenMP 16t (%)</strong></th>
+  </thead>
+  <tbody>
+    <tr>
+      <td>16×16</td>
+      <td>0.000431</td>
+      <td>0.00</td>
+      <td>-2504.17</td>
+      <td>-18143.39</td>
+    </tr>
+    <tr>
+      <td>32×32</td>
+      <td>0.001348</td>
+      <td>338.80</td>
+      <td>-1.39</td>
+      <td>-5042.17</td>
+    </tr>
+    <tr>
+      <td>64×64</td>
+      <td>0.005646</td>
+      <td>399.47</td>
+      <td>-6.96</td>
+      <td>-936.99</td>
+    </tr>
+    <tr>
+      <td>128×128</td>
+      <td>0.024963</td>
+      <td>385.88</td>
+      <td>-0.91</td>
+      <td>-214.52</td>
+    </tr>
+    <tr>
+      <td>256×256</td>
+      <td>0.099544</td>
+      <td>296.11</td>
+      <td>107.27</td>
+      <td>-0.71</td>
+    </tr>
+    <tr>
+      <td>512×512</td>
+      <td>0.406555</td>
+      <td>202.43</td>
+      <td>61.57</td>
+      <td>169.14</td>
+    </tr>
+    <tr>
+      <td>1024×1024</td>
+      <td>2.662161</td>
+      <td>289.46</td>
+      <td>87.59</td>
+      <td>620.38</td>
+    </tr>
+    <tr>
+      <td>2048×2048</td>
+      <td>15.576879</td>
+      <td>195.95</td>
+      <td>26.94</td>
+      <td>394.11</td>
+    </tr>
+    <tr>
+      <td>4096×4096</td>
+      <td>76.933626</td>
+      <td>192.39</td>
+      <td>65.01</td>
+      <td>521.65</td>
+    </tr>
+  </tbody>
 </table>
 
 ## 6.Conclusion
+
+When working with parallel computing, as we proved with our experiments, there isn't a "one size fits all" solution to all problems, rather a solution should be based on the context of the problem.  
+For example, in our case it would be wasteful to transpose small to medium matrices using OpenMP, as it is slow and clunky, so a sequential or implicit implementation is to be preferred. On the other hand, if we want to transpose very large matrices (even larger than what we presented) and have a very capable system at our disposal, OpenMP is the solution we should look at, as it allows us to make full use of our hardware, resulting in extremely fast computation.
+
+In the context of our experiments, we can make a comparison between what we expected and what actually happened in the end:
+
+-   OpenMP is not a good idea for small matrices: as mentioned many times now, it is completely wasteful
+-   Implicit parallelization is more efficient than expected for medium matrices (around 1024x1024) and especially for the symmetry check it is extremely efficient
+-   More threads aren't always the way when trying to find a solution that, like in our case, was supposed to fit different use cases (depending on matrix size)
 
 ## 7. Installation and reproducibility of the results
 
@@ -911,3 +940,8 @@ The specific configurations for MinGW can be found in the `utils` folder of the 
 To reproduce the results on the Unitn cluster (supposing one has access to it, of course), the code in the folder `cluster code` can just be copied and pasted alongside the `matrix_transposition.pbs` file, which will compile and run automatically all the scripts. Additionally, the contents of `.bashrc` should be copied or merged into an existing equal file in the cluster directory.
 
 ## 8. References
+
+-   _A RAM Bandwidth and Delay Calculator_, available at: [link](https://edu.finlaydag33k.nl/calculating%20ram%20bandwidth/). Accessed: Nov. 3, 2024.
+-   _CPU-Z: A System Hardware Analyzer_, available at: [link](https://www.cpuid.com/softwares/cpu-z.html). Accessed: Nov. 3, 2024.
+-   _Programming your GPU with OpenMP_, Tom Deakin and Timothy G. Mattson, available at: [link](https://mitpress.mit.edu/9780262547536/programming-your-gpu-with-openmp/). Accessed: Nov. 8, 2024 to Nov. 29, 2024.
+-   _ChatGPT_, available at: [link](https://www.openai.com/chatgpt). Accessed: all throughout the project.
