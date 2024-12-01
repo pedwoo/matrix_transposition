@@ -14,7 +14,7 @@
    &nbsp;&nbsp;&nbsp;&nbsp;2.2. [Limitations in existing solutions](#22-limitations-in-existing-solutions)  
    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.2.1. [Limitations of OpenMP](#221-limitations-of-openmp)  
    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.2.2. [Limitations of MPI](#222-limitations-of-mpi)  
-   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.2.3. [Limitations of CUDA](#223-limitations-of-cuda)
+   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.2.3. [Limitations of CUDA](#223-limitations-of-cuda)  
    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.2.3. [Limitations of hybrid approaches](#224-limitations-of-hybrid-approaches)
 3. [Contribution and methodology](#3-contribution-and-methodology)  
    &nbsp;&nbsp;&nbsp;&nbsp;3.1. [Sequential approach](#31-sequential-approach)  
