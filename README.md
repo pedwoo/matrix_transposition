@@ -174,24 +174,22 @@ We can now take a brief look at what the system we perform the experiments on co
 -   **Memory channels**: 2 (supported by the CPU)
 
 For DDR type memory, bandwidth can be simply computed as:
-$$\text{Memory bandwdith}=\text{Memory clock speed}\times\text{Memory bus width}\times\text{Number of channels}$$
-$$\text{Memory bandwidth}=6400\times10^6\times32\times4=819.2\text{Gbps}=102.4\text{GBps}$$
+
+<img style="display:block;margin:auto" src="https://latex.codecogs.com/png.image?\dpi{110}\fg{white}\text{Memory bandwdith}=\text{Memory clock speed}\times\text{Memory bus width}\times\text{Number of channels}"/>
+<br/>
+<img style="display:block;margin:auto" src="https://latex.codecogs.com/png.image?\dpi{110}\fg{white}\text{Memory bandwidth}=6400\times10^6\times32\times4=819.2\text{Gbps}=102.4\text{GBps}"/>
+
 Sadly, even though the RAM works in a 4-channel configuration, the CPU only allows for dual-channel memory access, effectively cutting in half the usable bandwidth. The value used in calculations will therefore be $51.2\text{GBps}$, even through a more powerful CPU would allow the use of the entire memory bandwidth.  
 With this number in mind, we can go on to compute the theoretical times it would take to transpose each size of matrix supposing full memory bandwidth utilization. The formula follows:
 
-$$
-\text{t}=\frac{\text{Total data transfer}}{\text{Memory bandwidth}}
-$$
+<img style="display:block;margin:auto" src="https://latex.codecogs.com/png.image?\dpi{110}\fg{white}\text{t}=\frac{\text{Total data transfer}}{\text{Memory bandwidth}}"/>
+<br/>
 
 Computing this allows us two ways to approach the calculation of the effective memory bandwidth utilization (U) for each of the solution proposed: one way is to compute the ratio between the theoretical and experimental times (a), while the other is the ratio of experimental data transfer and what peak bandwidth would allow in that same amount of time (b)
 
-$$
-\text{(a)}~~\text{U}=\frac{\text{Theoretical time}}{\text{Experimental time}}\times 100
-$$
-
-$$
-\text{(b)}~~\text{U}=\frac{\text{Total data transfer}}{\text{Experimental time}\times\text{Peak bandwidth}}\times 100
-$$
+<img style="display:block;margin:auto" src="https://latex.codecogs.com/png.image?\dpi{110}\fg{white}\text{(a)}\text{U}=\frac{\text{Theoretical time}}{\text{Experimental time}}\times100"/>
+<br/>
+<img style="display:block;margin:auto" src="https://latex.codecogs.com/png.image?\dpi{110}\fg{white}\text{(b)}\text{U}=\frac{\text{Total data transfer}}{\text{Experimental time}\times\text{Peak bandwidth}}\times100"/>
 
 ## 5. Results
 
@@ -835,9 +833,7 @@ The following table contains the memory bandwidth utilization for each approach 
 We can now also compare the three approaches in terms of speedup. By using the sequential approach as a baseline, we can express in percentage how much faster each of the other approaches are, per matrix size.  
 We can compute the speedup using the formula that follows. Note that `Test time` represents the time for which we want to calculate the speedup:
 
-$$
-\text{Speedup}=\frac{\text{Baseline time - Test time}}{\text{Baseline time}}\times100
-$$
+<img style="display:block;margin:auto" src="https://latex.codecogs.com/png.image?\dpi{110}\fg{white}\text{Speedup}=\frac{\text{Baseline&space;time-Test&space;time}}{\text{Baseline&space;time}}\times100"/>
 
 The results per approach and matrix size follow.
 
@@ -913,5 +909,7 @@ The results per approach and matrix size follow.
 The repository containing all the code for the project can be found here [Github link](https://github.com/pedwoo/matrix_transposition.git).  
 After downloading the code (or cloning through the link), if not already installed, install gcc compiler. On a Linux machine this can simply be done from a command prompt, while on Windows third-party software is required. Since testing was also done on a Windows machine MinGW was used.  
 The specific configurations for MinGW can be found in the `utils` folder of the repository. The file in there was obtained by running the following command: `mingw-get list mingw-components.txt`. To reproduce the instance of MinGW, complete the installation through the installer, then in a command prompt use `mingw-get install <package-name>` to install the different packages.
+
+To reproduce the results on the Unitn cluster (supposing one has access to it, of course), the code in the folder `cluster code` can just be copied and pasted alongside the `matrix_transposition.pbs` file, which will compile and run automatically all the scripts. Additionally, the contents of `.bashrc` should be copied or merged into an existing equal file in the cluster directory.
 
 ## 8. References
