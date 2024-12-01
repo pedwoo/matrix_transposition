@@ -175,21 +175,19 @@ We can now take a brief look at what the system we perform the experiments on co
 
 For DDR type memory, bandwidth can be simply computed as:
 
-<img style="display:block;margin:auto" src="https://latex.codecogs.com/png.image?\dpi{110}\fg{white}\text{Memory bandwdith}=\text{Memory clock speed}\times\text{Memory bus width}\times\text{Number of channels}"/>
-<br/>
-<img style="display:block;margin:auto" src="https://latex.codecogs.com/png.image?\dpi{110}\fg{white}\text{Memory bandwidth}=6400\times10^6\times32\times4=819.2\text{Gbps}=102.4\text{GBps}"/>
+<img style="display:block;margin:0 auto 10px;" src="https://latex.codecogs.com/png.image?\dpi{110}\fg{white}\text{Memory bandwdith}=\text{Memory clock speed}\times\text{Memory bus width}\times\text{Number of channels}"/>
+
+<img style="display:block;margin:0 auto 10px" src="https://latex.codecogs.com/png.image?\dpi{110}\fg{white}\text{Memory bandwidth}=6400\times10^6\times32\times4=819.2\text{Gbps}=102.4\text{GBps}"/>
 
 Sadly, even though the RAM works in a 4-channel configuration, the CPU only allows for dual-channel memory access, effectively cutting in half the usable bandwidth. The value used in calculations will therefore be $51.2\text{GBps}$, even through a more powerful CPU would allow the use of the entire memory bandwidth.  
 With this number in mind, we can go on to compute the theoretical times it would take to transpose each size of matrix supposing full memory bandwidth utilization. The formula follows:
 
-<img style="display:block;margin:auto" src="https://latex.codecogs.com/png.image?\dpi{110}\fg{white}\text{t}=\frac{\text{Total data transfer}}{\text{Memory bandwidth}}"/>
-<br/>
+<img style="display:block;margin:0 auto 10px" src="https://latex.codecogs.com/png.image?\dpi{110}\fg{white}\text{t}=\frac{\text{Total data transfer}}{\text{Memory bandwidth}}"/>
 
 Computing this allows us two ways to approach the calculation of the effective memory bandwidth utilization (U) for each of the solution proposed: one way is to compute the ratio between the theoretical and experimental times (a), while the other is the ratio of experimental data transfer and what peak bandwidth would allow in that same amount of time (b)
 
-<img style="display:block;margin:auto" src="https://latex.codecogs.com/png.image?\dpi{110}\fg{white}\text{(a)}\text{U}=\frac{\text{Theoretical time}}{\text{Experimental time}}\times100"/>
-<br/>
-<img style="display:block;margin:auto" src="https://latex.codecogs.com/png.image?\dpi{110}\fg{white}\text{(b)}\text{U}=\frac{\text{Total data transfer}}{\text{Experimental time}\times\text{Peak bandwidth}}\times100"/>
+<img style="display:block;margin:0 auto 10px" src="https://latex.codecogs.com/png.image?\dpi{110}\fg{white}\text{(a)}\text{U}=\frac{\text{Theoretical time}}{\text{Experimental time}}\times100"/>
+<img style="display:block;margin:0 auto 10px" src="https://latex.codecogs.com/png.image?\dpi{110}\fg{white}\text{(b)}\text{U}=\frac{\text{Total data transfer}}{\text{Experimental time}\times\text{Peak bandwidth}}\times100"/>
 
 ## 5. Results
 
@@ -474,7 +472,7 @@ Units are omitted in order to make the table more readable. The first column doe
     </thead>
     <tbody>
         <tr>
-            <td>16 x 16</td>
+            <td>16x16</td>
             <td>0.000667</td>
             <td>0.000000</td>
             <td>0.005000</td>
@@ -487,7 +485,7 @@ Units are omitted in order to make the table more readable. The first column doe
             <td>9.582333</td>
         </tr>
         <tr>
-            <td>32 x 32</td>
+            <td>32x32</td>
             <td>0.002333</td>
             <td>0.000667</td>
             <td>0.001333</td>
@@ -500,7 +498,7 @@ Units are omitted in order to make the table more readable. The first column doe
             <td>9.457000</td>
         </tr>
         <tr>
-            <td>64 x 64</td>
+            <td>64x64</td>
             <td>0.009333</td>
             <td>0.001000</td>
             <td>0.004000</td>
@@ -513,7 +511,7 @@ Units are omitted in order to make the table more readable. The first column doe
             <td>4.695000</td>
         </tr>
         <tr>
-            <td>128 x 128</td>
+            <td>128x128</td>
             <td>0.037000</td>
             <td>0.004000</td>
             <td>0.015667</td>
@@ -526,7 +524,7 @@ Units are omitted in order to make the table more readable. The first column doe
             <td>0.054000</td>
         </tr>
         <tr>
-            <td>256 x 256</td>
+            <td>256x256</td>
             <td>0.153667</td>
             <td>0.016333</td>
             <td>0.054667</td>
@@ -539,7 +537,7 @@ Units are omitted in order to make the table more readable. The first column doe
             <td>0.070000</td>
         </tr>
         <tr>
-            <td>512 x 512</td>
+            <td>512x512</td>
             <td>0.646333</td>
             <td>0.095333</td>
             <td>0.278333</td>
@@ -552,7 +550,7 @@ Units are omitted in order to make the table more readable. The first column doe
             <td>0.328333</td>
         </tr>
         <tr>
-            <td>1024 x 1024</td>
+            <td>1024x1024</td>
             <td>2.638000</td>
             <td>0.419333</td>
             <td>1.146667</td>
@@ -565,7 +563,7 @@ Units are omitted in order to make the table more readable. The first column doe
             <td>0.463000</td>
         </tr>
         <tr>
-            <td>2048 x 2048</td>
+            <td>2048x2048</td>
             <td>23.948333</td>
             <td>6.010333</td>
             <td>10.158333</td>
@@ -578,7 +576,7 @@ Units are omitted in order to make the table more readable. The first column doe
             <td>2.302667</td>
         </tr>
         <tr>
-            <td>4096 x 4096</td>
+            <td>4096x4096</td>
             <td>123.396667</td>
             <td>41.008667</td>
             <td>66.783333</td>
@@ -614,7 +612,7 @@ Units are omitted in order to make the table more readable. The first column doe
     </thead>
     <tbody>
         <tr>
-            <td>16 x 16</td>
+            <td>16x16</td>
             <td>0.000333</td>
             <td>0.000333</td>
             <td>0.002333</td>
@@ -627,7 +625,7 @@ Units are omitted in order to make the table more readable. The first column doe
             <td>0.003000</td>
         </tr>
         <tr>
-            <td>32 x 32</td>
+            <td>32x32</td>
             <td>0.001000</td>
             <td>0.000333</td>
             <td>0.001667</td>
@@ -640,7 +638,7 @@ Units are omitted in order to make the table more readable. The first column doe
             <td>0.001667</td>
         </tr>
         <tr>
-            <td>64 x 64</td>
+            <td>64x64</td>
             <td>0.003333</td>
             <td>0.000333</td>
             <td>0.002000</td>
@@ -653,7 +651,7 @@ Units are omitted in order to make the table more readable. The first column doe
             <td>0.003000</td>
         </tr>
         <tr>
-            <td>128 x 128</td>
+            <td>128x128</td>
             <td>0.012667</td>
             <td>0.002333</td>
             <td>0.006667</td>
@@ -666,7 +664,7 @@ Units are omitted in order to make the table more readable. The first column doe
             <td>0.006667</td>
         </tr>
         <tr>
-            <td>256 x 256</td>
+            <td>256x256</td>
             <td>0.048667</td>
             <td>0.009000</td>
             <td>0.018000</td>
@@ -679,7 +677,7 @@ Units are omitted in order to make the table more readable. The first column doe
             <td>0.018667</td>
         </tr>
         <tr>
-            <td>512 x 512</td>
+            <td>512x512</td>
             <td>0.189333</td>
             <td>0.035000</td>
             <td>0.067667</td>
@@ -692,7 +690,7 @@ Units are omitted in order to make the table more readable. The first column doe
             <td>0.035667</td>
         </tr>
         <tr>
-            <td>1024 x 1024</td>
+            <td>1024x1024</td>
             <td>0.743000</td>
             <td>0.139000</td>
             <td>0.250667</td>
@@ -705,7 +703,7 @@ Units are omitted in order to make the table more readable. The first column doe
             <td>0.250667</td>
         </tr>
         <tr>
-            <td>2048 x 2048</td>
+            <td>2048x2048</td>
             <td>2.948333</td>
             <td>0.544667</td>
             <td>0.889667</td>
@@ -718,7 +716,7 @@ Units are omitted in order to make the table more readable. The first column doe
             <td>0.544667</td>
         </tr>
         <tr>
-            <td>4096 x 4096</td>
+            <td>4096x4096</td>
             <td>11.742000</td>
             <td>2.193667</td>
             <td>3.385000</td>
@@ -754,7 +752,7 @@ The following table contains the memory bandwidth utilization for each approach 
   </thead>
   <tbody>
     <tr>
-        <td>16 x 16</td>
+        <td>16x16</td>
         <td>0.002</td>
         <td>0.000037</td>
         <td>8.063</td>
@@ -762,7 +760,7 @@ The following table contains the memory bandwidth utilization for each approach 
         <td>0.042</td>
     </tr>
     <tr>
-        <td>32 x 32</td>
+        <td>32x32</td>
         <td>0.008</td>
         <td>0.000149</td>
         <td>8.050</td>
@@ -770,7 +768,7 @@ The following table contains the memory bandwidth utilization for each approach 
         <td>0.153</td>
     </tr>
     <tr>
-        <td>64 x 64</td>
+        <td>64x64</td>
         <td>0.032</td>
         <td>0.000596</td>
         <td>7.657</td>
@@ -778,7 +776,7 @@ The following table contains the memory bandwidth utilization for each approach 
         <td>0.628</td>
     </tr>
     <tr>
-        <td>128 x 128</td>
+        <td>128x128</td>
         <td>0.128</td>
         <td>0.002384</td>
         <td>7.423</td>
@@ -786,7 +784,7 @@ The following table contains the memory bandwidth utilization for each approach 
         <td>2.428</td>
     </tr>
     <tr>
-        <td>256 x 256</td>
+        <td>256x256</td>
         <td>0.512</td>
         <td>0.009537</td>
         <td>7.407</td>
@@ -794,7 +792,7 @@ The following table contains the memory bandwidth utilization for each approach 
         <td>8.085</td>
     </tr>
     <tr>
-        <td>512 x 512</td>
+        <td>512x512</td>
         <td>2</td>
         <td>0.038147</td>
         <td>8.488</td>
@@ -802,7 +800,7 @@ The following table contains the memory bandwidth utilization for each approach 
         <td>23.528</td>
     </tr>
     <tr>
-        <td>1024 x 1024</td>
+        <td>1024x1024</td>
         <td>8</td>
         <td>0.152588</td>
         <td>5.470</td>
@@ -810,7 +808,7 @@ The following table contains the memory bandwidth utilization for each approach 
         <td>34.612</td>
     </tr>
     <tr>
-        <td>2048 x 2048</td>
+        <td>2048x2048</td>
         <td>32</td>
         <td>0.610352</td>
         <td>4.130</td>
@@ -818,7 +816,7 @@ The following table contains the memory bandwidth utilization for each approach 
         <td>19.470</td>
     </tr>
     <tr>
-        <td>4096 x 4096</td>
+        <td>4096x4096</td>
         <td>128</td>
         <td>2.441406</td>
         <td>3.380</td>
@@ -846,55 +844,55 @@ The results per approach and matrix size follow.
     </thead>
     <tbody>
         <tr>
-            <td>16 x 16</td>
+            <td>16x16</td>
             <td>0.000462</td>
             <td>462</td>
             <td>0.52</td>
         </tr>
         <tr>
-            <td>32 x 32</td>
+            <td>32x32</td>
             <td>0.001851</td>
             <td>784</td>
             <td>1.91</td>
         </tr>
         <tr>
-            <td>64 x 64</td>
+            <td>64x64</td>
             <td>0.007784</td>
             <td>1046</td>
             <td>8.20</td>
         </tr>
         <tr>
-            <td>128 x 128</td>
+            <td>128x128</td>
             <td>0.032118</td>
             <td>670</td>
             <td>32.70</td>
         </tr>
         <tr>
-            <td>256 x 256</td>
+            <td>256x256</td>
             <td>0.128760</td>
             <td>899</td>
             <td>109.23</td>
         </tr>
         <tr>
-            <td>512 x 512</td>
+            <td>512x512</td>
             <td>0.449411</td>
             <td>460</td>
             <td>277.41</td>
         </tr>
         <tr>
-            <td>1024 x 1024</td>
+            <td>1024x1024</td>
             <td>2.789407</td>
             <td>468</td>
             <td>632.54</td>
         </tr>
         <tr>
-            <td>2048 x 2048</td>
+            <td>2048x2048</td>
             <td>14.779019</td>
             <td>331</td>
             <td>471.50</td>
         </tr>
         <tr>
-            <td>4096 x 4096</td>
+            <td>4096x4096</td>
             <td>72.229659</td>
             <td>293</td>
             <td>542.61</td>
