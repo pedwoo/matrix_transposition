@@ -175,7 +175,7 @@ We can now take a brief look at what the system we perform the experiments on co
 
 For DDR type memory, bandwidth can be simply computed as:
 
-<img style="display:block;margin:0 auto 10px;" src="https://latex.codecogs.com/png.image?\dpi{110}\fg{white}\text{Memory bandwdith}=\text{Memory clock speed}\times\text{Memory bus width}\times\text{Number of channels}"/>
+<img style="display:block;margin:0 auto 10px;" src="https://latex.codecogs.com/png.image?\dpi{110}\fg{white}\text{Memory&bandwdith}=\text{Memory&clock&speed}\times\text{Memory&bus&width}\times\text{Number&of&channels}"/>
 
 <img style="display:block;margin:0 auto 10px" src="https://latex.codecogs.com/png.image?\dpi{110}\fg{white}\text{Memory bandwidth}=6400\times10^6\times32\times4=819.2\text{Gbps}=102.4\text{GBps}"/>
 
