@@ -15,15 +15,20 @@
    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.2.2. [Limitations of MPI](#222-limitations-of-mpi)  
    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.2.3. [Limitations of CUDA](#223-limitations-of-cuda)
 3. [Contribution and methodology](#3-contribution-and-methodology)  
-   &nbsp;&nbsp;&nbsp;&nbsp;3.1 [Sequential approach](#31-sequential-approach)  
-   &nbsp;&nbsp;&nbsp;&nbsp;3.2 [Implicit parallelism](#32-implicit-parallelism)  
-   &nbsp;&nbsp;&nbsp;&nbsp;3.3 [OpenMP](#33-parallelism-through-openmp)
+   &nbsp;&nbsp;&nbsp;&nbsp;3.1. [Sequential approach](#31-sequential-approach)  
+   &nbsp;&nbsp;&nbsp;&nbsp;3.2. [Implicit parallelism](#32-implicit-parallelism)  
+   &nbsp;&nbsp;&nbsp;&nbsp;3.3. [OpenMP](#33-parallelism-through-openmp)
 4. [Experiments and system description](#4-experiments-and-system-description)  
    &nbsp;&nbsp;&nbsp;&nbsp;4.1. [System configuration](#41-system-configuration)  
    &nbsp;&nbsp;&nbsp;&nbsp;4.2. [Peak performance evaluation](#42-peak-performance-evaluation)
 5. [Results](#5-results)  
    &nbsp;&nbsp;&nbsp;&nbsp;5.1. [Experimental times per approach and matrix size](#51-experimental-times-per-approach-and-matrix-size)  
+   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;5.1.1. [Transposition performance](#511-transposition-performance)  
+   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;5.1.2. [Symmetry check performance](#512-symmetry-check-performance)  
+   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;5.1.3. [OpenMP transposition performance](#513-openmp-transposition-performance)  
    &nbsp;&nbsp;&nbsp;&nbsp;5.2. [Experimental times on the Unitn cluster](#52-experimental-times-on-the-unitn-cluster)  
+   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;5.2.1. []()  
+   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;5.2.2. []()  
    &nbsp;&nbsp;&nbsp;&nbsp;5.3. [Experimental memory bandwidth utilization](#53-experimental-memory-bandwidth-utilization)  
    &nbsp;&nbsp;&nbsp;&nbsp;5.4. [Speedup compared to baseline approach](#54-speedup-compared-to-baseline-approach)
 6. [Conclusions](#6conclusion)
@@ -194,90 +199,547 @@ $$
 
 The results for each matrix size and approach follows. These results were obtained when testing locally.
 
+#### 5.1.1 Transposition performance
+
 <table border="1" style="margin:auto">
     <thead>
-        <th>Size</th>
-        <th>Data (MB)</th>
-        <th>Sequential (ms)</th>
-        <th>Implicit (ms)</th>
-        <th>OpenMP (ms)</th>
+        <th><strong>Matrix Size</strong></th>
+        <th><strong>Sequential (ms)</strong></th>
+        <th><strong>Implicit (ms)</strong></th>
+        <th><strong>OpenMP 1th (ms)</strong></th>
+        <th><strong>OpenMP 16th (ms)</strong></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>16 × 16</td>
+            <td>0.000431</td>
+            <td>0.000136</td>
+            <td>0.011179</td>
+            <td>0.080900</td>
+        </tr>
+        <tr>
+            <td>32 × 32</td>
+            <td>0.001348</td>
+            <td>0.000307</td>
+            <td>0.011193</td>
+            <td>0.071948</td>
+        </tr>
+        <tr>
+            <td>64 × 64</td>
+            <td>0.005646</td>
+            <td>0.001130</td>
+            <td>0.014490</td>
+            <td>0.073297</td>
+        </tr>
+        <tr>
+            <td>128 × 128</td>
+            <td>0.024963</td>
+            <td>0.005141</td>
+            <td>0.020680</td>
+            <td>0.078257</td>
+        </tr>
+        <tr>
+            <td>256 × 256</td>
+            <td>0.099544</td>
+            <td>0.025121</td>
+            <td>0.064853</td>
+            <td>0.098842</td>
+        </tr>
+        <tr>
+            <td>512 × 512</td>
+            <td>0.406555</td>
+            <td>0.134602</td>
+            <td>0.251878</td>
+            <td>0.150927</td>
+        </tr>
+        <tr>
+            <td>1024 × 1024</td>
+            <td>2.662161</td>
+            <td>0.684287</td>
+            <td>1.420957</td>
+            <td>0.369677</td>
+        </tr>
+        <tr>
+            <td>2048 × 2048</td>
+            <td>15.576879</td>
+            <td>5.287665</td>
+            <td>9.913844</td>
+            <td>3.156352</td>
+        </tr>
+        <tr>
+            <td>4096 × 4096</td>
+            <td>76.933626</td>
+            <td>26.285314</td>
+            <td>46.543102</td>
+            <td>12.394242</td>
+        </tr>
+    </tbody>
+</table>
+<br/>
+
+#### 5.1.2 Symmetry check performance
+
+<table border="1" style="margin:auto">
+    <thead>
+        <th><strong>Matrix Size</strong></th>
+        <th><strong>Sequential (ms)</strong></th>
+        <th><strong>Implicit (ms)</strong></th>
+        <th><strong>OpenMP 1th (ms)</strong></th>
+        <th><strong>OpenMP 16th (ms)</strong></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>16 × 16</td>
+            <td>0.000285</td>
+            <td>0.000038</td>
+            <td>0.000155</td>
+            <td>0.101527</td>
+        </tr>
+        <tr>
+            <td>32 × 32</td>
+            <td>0.000701</td>
+            <td>0.000021</td>
+            <td>0.000351</td>
+            <td>0.084870</td>
+        </tr>
+        <tr>
+            <td>64 × 64</td>
+            <td>0.001509</td>
+            <td>0.000023</td>
+            <td>0.001341</td>
+            <td>0.087259</td>
+        </tr>
+        <tr>
+            <td>128 × 128</td>
+            <td>0.006815</td>
+            <td>0.000023</td>
+            <td>0.005797</td>
+            <td>0.104125</td>
+        </tr>
+        <tr>
+            <td>256 × 256</td>
+            <td>0.021933</td>
+            <td>0.000025</td>
+            <td>0.022852</td>
+            <td>0.123531</td>
+        </tr>
+        <tr>
+            <td>512 × 512</td>
+            <td>0.074801</td>
+            <td>0.000029</td>
+            <td>0.102316</td>
+            <td>0.156315</td>
+        </tr>
+        <tr>
+            <td>1024 × 1024</td>
+            <td>0.268553</td>
+            <td>0.000044</td>
+            <td>0.532228</td>
+            <td>0.501619</td>
+        </tr>
+        <tr>
+            <td>2048 × 2048</td>
+            <td>1.027298</td>
+            <td>0.000209</td>
+            <td>4.769207</td>
+            <td>1.723141</td>
+        </tr>
+        <tr>
+            <td>4096 × 4096</td>
+            <td>4.051358</td>
+            <td>0.000225</td>
+            <td>26.055655</td>
+            <td>8.155287</td>
+        </tr>
+    </tbody>
+</table>
+<br/>
+
+Surprisingly, even though the sequential approach was much slower in transposing the matrices compared to OpenMP, when checking symmetry is proves substantially more efficient, especially when taking into consideration that the only direct comparison with it is the single-threaded OpenMP result, since the sequential approach operates on a single thread itself.  
+The reason for this difference in performance is that when simply checking the symmetry of the matrix the overhead required to operate under OpenMP is completely overkill and causes the performance to drop.
+
+Also to be taken into consideration is the fact that when compiling the OpenMP script we use the flags `-O3 -fopenmp` which, even though the two operate on different aspects of the optimization, cause somewhat of a conflict as some of the aggressive optimizations implied by `-O3` are prevented from coming into play by `-fopenmp` (this includes for example full loop unrolling, which for such a simple operation can be very beneficial).
+
+Due to this exact same fact the implicit approach is much faster than both sequential and OpenMP approaches, as there isn't any overhead caused by multi-threading, and all the optimizations (this case contained in `-O2`) are actually implemented.
+
+#### 5.1.3 OpenMP transposition performance
+
+<table border="1" style="margin:auto">
+    <thead>
+            <th><strong>Matrix Size</strong></th>
+            <th><strong>1 thread (ms)</strong></th>
+            <th><strong>2 threads (ms)</strong></th>
+            <th><strong>4 threads (ms)</strong></th>
+            <th><strong>8 threads (ms)</strong></th>
+            <th><strong>16 threads (ms)</strong></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>16 × 16</td>
+            <td>0.011179</td>
+            <td>0.030534</td>
+            <td>0.041921</td>
+            <td>0.054663</td>
+            <td>0.080900</td>
+        </tr>
+        <tr>
+            <td>32 × 32</td>
+            <td>0.011193</td>
+            <td>0.023435</td>
+            <td>0.036481</td>
+            <td>0.042075</td>
+            <td>0.071948</td>
+        </tr>
+        <tr>
+            <td>64 × 64</td>
+            <td>0.014490</td>
+            <td>0.030449</td>
+            <td>0.034197</td>
+            <td>0.048950</td>
+            <td>0.073297</td>
+        </tr>
+        <tr>
+            <td>128 × 128</td>
+            <td>0.020680</td>
+            <td>0.037482</td>
+            <td>0.040542</td>
+            <td>0.059454</td>
+            <td>0.078257</td>
+        </tr>
+        <tr>
+            <td>256 × 256</td>
+            <td>0.064853</td>
+            <td>0.070317</td>
+            <td>0.067049</td>
+            <td>0.071892</td>
+            <td>0.098842</td>
+        </tr>
+        <tr>
+            <td>512 × 512</td>
+            <td>0.251878</td>
+            <td>0.229961</td>
+            <td>0.155771</td>
+            <td>0.135454</td>
+            <td>0.150927</td>
+        </tr>
+        <tr>
+            <td>1024 × 1024</td>
+            <td>1.420957</td>
+            <td>0.988193</td>
+            <td>0.646876</td>
+            <td>0.451882</td>
+            <td>0.369677</td>
+        </tr>
+        <tr>
+            <td>2048 × 2048</td>
+            <td>9.913844</td>
+            <td>6.574907</td>
+            <td>4.940285</td>
+            <td>3.576542</td>
+            <td>3.156352</td>
+        </tr>
+        <tr>
+            <td>4096 × 4096</td>
+            <td>46.543102</td>
+            <td>29.410319</td>
+            <td>21.338571</td>
+            <td>14.922946</td>
+            <td>12.394242</td>
+        </tr>
+    </tbody>
+</table>
+<br/>
+
+From this data we can make pretty much the same observation we did before, which is that, due to the overhead introduced when using OpenMP, for small matrices, the performance is "capped" at the minimum time it takes to setup such overhead. This ultimately causes the times to be nearly constant across matrix sizes and thread counts, and often much slower than both sequential and implicit approaches.
+
+### 5.2 Experimental times on the Unitn cluster
+
+The results obtained when testing the code within the Unitn cluster follow. In this case for the OpenMP approaches, up to 96 threads were used (the maximum amount of threads in a single node).
+
+#### 5.2.1 Transpositon performance on Unitn cluster
+
+Units are omitted in order to make the table more readable. The first column doesn't have a unit as it is just the matrix size, all other columns are in `ms`
+
+<table border="1" style="margin:auto">
+    <thead>
+        <th><strong>Matrix Size</strong></th>
+        <th><strong>Sequential</strong></th>
+        <th><strong>Implicit Time</strong></th>
+        <th><strong>OpenMP 1t</strong></th>
+        <th><strong>OpenMP 2t</strong></th>
+        <th><strong>OpenMP 4t</strong></th>
+        <th><strong>OpenMP 8t</strong></th>
+        <th><strong>OpenMP 16t</strong></th>
+        <th><strong>OpenMP 32t</strong></th>
+        <th><strong>OpenMP 64t</strong></th>
+        <th><strong>OpenMP 96t</strong></th>
     </thead>
     <tbody>
         <tr>
             <td>16 x 16</td>
-            <td>0.002</td>
-            <td>0.000462</td>
-            <td>0.000100</td>
-            <td>0.088406</td>
+            <td>0.000667</td>
+            <td>0.000000</td>
+            <td>0.005000</td>
+            <td>0.039667</td>
+            <td>0.047000</td>
+            <td>0.080333</td>
+            <td>0.144333</td>
+            <td>0.264333</td>
+            <td>0.503000</td>
+            <td>9.582333</td>
         </tr>
         <tr>
             <td>32 x 32</td>
-            <td>0.008</td>
-            <td>0.001851</td>
-            <td>0.000236</td>
-            <td>0.097082</td>
+            <td>0.002333</td>
+            <td>0.000667</td>
+            <td>0.001333</td>
+            <td>0.003667</td>
+            <td>0.005333</td>
+            <td>0.009000</td>
+            <td>0.008000</td>
+            <td>0.017000</td>
+            <td>0.026000</td>
+            <td>9.457000</td>
         </tr>
         <tr>
             <td>64 x 64</td>
-            <td>0.032</td>
-            <td>0.007784</td>
-            <td>0.000746</td>
-            <td>0.094980</td>
+            <td>0.009333</td>
+            <td>0.001000</td>
+            <td>0.004000</td>
+            <td>0.036667</td>
+            <td>0.031667</td>
+            <td>0.024333</td>
+            <td>0.027333</td>
+            <td>0.029000</td>
+            <td>0.040000</td>
+            <td>4.695000</td>
         </tr>
         <tr>
             <td>128 x 128</td>
-            <td>0.128</td>
-            <td>0.032118</td>
-            <td>0.004798</td>
-            <td>0.098189</td>
+            <td>0.037000</td>
+            <td>0.004000</td>
+            <td>0.015667</td>
+            <td>0.057000</td>
+            <td>0.068333</td>
+            <td>0.050000</td>
+            <td>0.033667</td>
+            <td>0.037000</td>
+            <td>0.054667</td>
+            <td>0.054000</td>
         </tr>
         <tr>
             <td>256 x 256</td>
-            <td>0.512</td>
-            <td>0.128760</td>
-            <td>0.014329</td>
-            <td>0.117963</td>
+            <td>0.153667</td>
+            <td>0.016333</td>
+            <td>0.054667</td>
+            <td>0.162000</td>
+            <td>0.117333</td>
+            <td>0.093000</td>
+            <td>0.073333</td>
+            <td>0.047333</td>
+            <td>0.050000</td>
+            <td>0.070000</td>
         </tr>
         <tr>
             <td>512 x 512</td>
-            <td>2</td>
-            <td>0.449411</td>
-            <td>0.097574</td>
-            <td>0.162131</td>
+            <td>0.646333</td>
+            <td>0.095333</td>
+            <td>0.278333</td>
+            <td>0.841333</td>
+            <td>0.630333</td>
+            <td>0.351667</td>
+            <td>0.282667</td>
+            <td>0.234333</td>
+            <td>0.264667</td>
+            <td>0.328333</td>
         </tr>
         <tr>
             <td>1024 x 1024</td>
-            <td>8</td>
-            <td>2.789407</td>
-            <td>0.596318</td>
-            <td>0.440855</td>
+            <td>2.638000</td>
+            <td>0.419333</td>
+            <td>1.146667</td>
+            <td>2.649667</td>
+            <td>1.669000</td>
+            <td>0.954333</td>
+            <td>0.585667</td>
+            <td>0.500000</td>
+            <td>0.460333</td>
+            <td>0.463000</td>
         </tr>
         <tr>
             <td>2048 x 2048</td>
-            <td>32</td>
-            <td>14.779019</td>
-            <td>4.474166</td>
-            <td>3.134817</td>
+            <td>23.948333</td>
+            <td>6.010333</td>
+            <td>10.158333</td>
+            <td>10.602333</td>
+            <td>7.787000</td>
+            <td>5.410667</td>
+            <td>3.373667</td>
+            <td>2.682000</td>
+            <td>2.235000</td>
+            <td>2.302667</td>
         </tr>
         <tr>
             <td>4096 x 4096</td>
-            <td>128</td>
-            <td>72.229659</td>
-            <td>24.779411</td>
-            <td>13.321789</td>
+            <td>123.396667</td>
+            <td>41.008667</td>
+            <td>66.783333</td>
+            <td>52.660667</td>
+            <td>43.164000</td>
+            <td>29.565667</td>
+            <td>26.597333</td>
+            <td>36.311333</td>
+            <td>25.712333</td>
+            <td>20.174667</td>
         </tr>
     </tbody>
 </table>
-<br>
+<br/>
 
-### 5.2 Experimental times on the Unitn cluster
+#### 5.2.2 Symmetry check performance on Unitn cluster
 
-The results obtained when testing the code within the Unitn cluster follow. Only the OpenMP approach is in the table, alongside the sequential one which is only there to set a baseline for comparison. Additionally, results from small matrices have been removed, since they wouldn't hold any significance as the overhead from OpenMP bottlenecks the results, hence using more cores wouldn't cause any increase in performance.
+Units are omitted in order to make the table more readable. The first column doesn't have a unit as it is just the matrix size, all other columns are in `ms`
+
+<table border="1" style="margin:auto">
+    <thead>
+        <th><strong>Matrix Size</strong></th>
+        <th><strong>Sequential</strong></th>
+        <th><strong>Implicit Time</strong></th>
+        <th><strong>OpenMP 1t</strong></th>
+        <th><strong>OpenMP 2t</strong></th>
+        <th><strong>OpenMP 4t</strong></th>
+        <th><strong>OpenMP 8t</strong></th>
+        <th><strong>OpenMP 16t</strong></th>
+        <th><strong>OpenMP 32t (ms)</strong></th>
+        <th><strong>OpenMP 64t</strong></th>
+        <th><strong>OpenMP 96t</strong></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>16 x 16</td>
+            <td>0.000333</td>
+            <td>0.000333</td>
+            <td>0.002333</td>
+            <td>0.002000</td>
+            <td>0.002000</td>
+            <td>0.002000</td>
+            <td>0.002333</td>
+            <td>0.002000</td>
+            <td>0.002000</td>
+            <td>0.003000</td>
+        </tr>
+        <tr>
+            <td>32 x 32</td>
+            <td>0.001000</td>
+            <td>0.000333</td>
+            <td>0.001667</td>
+            <td>0.000333</td>
+            <td>0.001333</td>
+            <td>0.001000</td>
+            <td>0.001667</td>
+            <td>0.001333</td>
+            <td>0.001667</td>
+            <td>0.001667</td>
+        </tr>
+        <tr>
+            <td>64 x 64</td>
+            <td>0.003333</td>
+            <td>0.000333</td>
+            <td>0.002000</td>
+            <td>0.000333</td>
+            <td>0.002000</td>
+            <td>0.002000</td>
+            <td>0.002000</td>
+            <td>0.002000</td>
+            <td>0.002000</td>
+            <td>0.003000</td>
+        </tr>
+        <tr>
+            <td>128 x 128</td>
+            <td>0.012667</td>
+            <td>0.002333</td>
+            <td>0.006667</td>
+            <td>0.002333</td>
+            <td>0.006667</td>
+            <td>0.006667</td>
+            <td>0.006667</td>
+            <td>0.006667</td>
+            <td>0.006667</td>
+            <td>0.006667</td>
+        </tr>
+        <tr>
+            <td>256 x 256</td>
+            <td>0.048667</td>
+            <td>0.009000</td>
+            <td>0.018000</td>
+            <td>0.018000</td>
+            <td>0.018000</td>
+            <td>0.018000</td>
+            <td>0.018000</td>
+            <td>0.018000</td>
+            <td>0.018667</td>
+            <td>0.018667</td>
+        </tr>
+        <tr>
+            <td>512 x 512</td>
+            <td>0.189333</td>
+            <td>0.035000</td>
+            <td>0.067667</td>
+            <td>0.035000</td>
+            <td>0.035667</td>
+            <td>0.035000</td>
+            <td>0.035000</td>
+            <td>0.035000</td>
+            <td>0.035667</td>
+            <td>0.035667</td>
+        </tr>
+        <tr>
+            <td>1024 x 1024</td>
+            <td>0.743000</td>
+            <td>0.139000</td>
+            <td>0.250667</td>
+            <td>0.139000</td>
+            <td>0.250667</td>
+            <td>0.250667</td>
+            <td>0.250667</td>
+            <td>0.250667</td>
+            <td>0.250667</td>
+            <td>0.250667</td>
+        </tr>
+        <tr>
+            <td>2048 x 2048</td>
+            <td>2.948333</td>
+            <td>0.544667</td>
+            <td>0.889667</td>
+            <td>0.544667</td>
+            <td>0.544667</td>
+            <td>0.544667</td>
+            <td>0.544667</td>
+            <td>0.544667</td>
+            <td>0.544667</td>
+            <td>0.544667</td>
+        </tr>
+        <tr>
+            <td>4096 x 4096</td>
+            <td>11.742000</td>
+            <td>2.193667</td>
+            <td>3.385000</td>
+            <td>2.193667</td>
+            <td>3.385000</td>
+            <td>3.385000</td>
+            <td>3.385000</td>
+            <td>3.385000</td>
+            <td>3.385000</td>
+            <td>3.385000</td>
+        </tr>
+    </tbody>
+</table>
+<br/>
 
 Some observations can be done after looking at the data provided.
 
--   The matrix sizes we have used for testing aren't large enough to the point where using a full 96 cores (1 node) or more is necessary at all, so after INSERT WHEN IT DOESN'T CHANGE ANYMORE providing more resources doesn't return any relevant improvement in the results.
--   Parallelization through OpenMP for the smaller matrix sizes obtains marginal improvements, if any, compared to the others. This is due to the overhead that the use of OpenMP introduces in the program. The results are in fact "capped" to how fast this overhead can execute, and therefore present very similar results, which isn't the case for any other approach.
+-   The matrix sizes we have used for testing aren't large enough to the point where using a full 96 cores (1 node) or more is necessary at all, so after a certain matrix size or assigned thread count, providing more resources doesn't return any relevant improvement in the results.
+-   As noted multiple times earlier, parallelization through OpenMP for the smaller matrix sizes obtains marginal improvements, if any, compared to the others. This is due to the overhead that the use of OpenMP introduces in the program. The results are in fact "capped" to how fast this overhead can execute, and therefore present very similar results, which isn't the case for any other approach.
 
 ### 5.3 Experimental memory bandwidth utilization
 
@@ -285,12 +747,12 @@ The following table contains the memory bandwidth utilization for each approach 
 
 <table border="1" style="margin:auto">
     <thead>
-        <th>Matrix Size</th>
-        <th>Data (MB)</th>
-        <th>Ideal time (ms)</th>
-        <th>Sequential (%)</th>
-        <th>Implicit (%)</th>
-        <th>OpenMP (%)</th>
+        <th><strong>Matrix Size</strong></th>
+        <th><strong>Data (MB)</strong></th>
+        <th><strong>Ideal time (ms)</strong></th>
+        <th><strong>Sequential (%)</strong></th>
+        <th><strong>Implicit (%)</strong></th>
+        <th><strong>OpenMP (%)</strong></th>
   </thead>
   <tbody>
     <tr>
