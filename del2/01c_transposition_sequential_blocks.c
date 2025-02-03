@@ -62,13 +62,13 @@ int checkTranspose(float **matrix, float **transpose, int n) {
 
 int main(int argc, char *argv[]) {
     if (argc != 3) {
-        printf("Usage: %s <iterations> <n> (matrix size is 2^n)\n", argv[0]);
+        printf("Usage: %s <n> <iterations>\n", argv[0]);
         return 1;
     }
 
-    int iterations = atoi(argv[1]);
+    int e = atoi(argv[1]);
+    int iterations = atoi(argv[2]);
     double total_t, total_s = 0.0;
-    int e = atoi(argv[2]);
     if (iterations < 1 || iterations > 50) {
         printf("Number of iterations must be 1 <= iterations <= 50\n");
         return 1;

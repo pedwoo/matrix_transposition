@@ -33,18 +33,15 @@ The first part of the project aims at improving the performance of matrix transp
 │   ├── MPI.pbs
 ``` -->
 
-```
+```bash
 .
 ├── del1
-│   ├── exec
-│   │   ├── * -> Compiled linux source code
+│   ├── exec/                                   # Compiled Linux source code
 │   ├── windows code
-│   │   ├── exec
-│   │   │   ├── * -> Compiled windows source code
-│   │   ├── performance
-│   │   │   ├── * -> Modified windows code for performance evaluation
+│   │   ├── exec/                               # Compiled Windows source code
+│   │   ├── performance/                        # Modified Windows code for performance evaluation
 │   │   ├── utils
-│   │   │   ├── graphs
+│   │   │   ├── graphs/
 │   │   │   ├── mingw-components.txt
 │   │   ├── 01_transposition_sequential.c
 │   │   ├── 02_transposition_par_implicit.c
@@ -52,9 +49,16 @@ The first part of the project aims at improving the performance of matrix transp
 │   │   ├── util.c
 │   ├── openMP.pbs
 │   ├── README_old.md
+
+.
 ├── del2
-│   ├── exec
-│   │   ├── * -> Compiled linux code
+│   ├── exec/                                   # Compiled Linux source code
+│   ├── 01b_transposition_sequential.c
+│   ├── 01c_transposition_sequential_blocks.c
+│   ├── 03b_transposition_omp.c
+│   ├── 03c_transposition_omp_blocks.c
+│   ├── 04_transposition_mpi_one.c
+│   ├── 05_transposition_mpi_two.c
 │   ├── MPI.pbs
 ```
 
@@ -85,28 +89,39 @@ Alternatively (or on a Windows system, by compiling a `.exe` file instead of `.o
     -   _Execution_: `./exec/03_transposition_par_openmp <n_threads>` or `.\exec\03_transposition_par_openmp <n_threads>`
 
 All of the files above will run both the symmetry check and transposition for a given matrix size (specified at runtime), providing the performance for both.\
-The following MPI approach is only intended to be compiled and executed on a Linux based system (like the Unitn cluster).
+The following MPI approach is only intended to be compiled and executed on a Linux based system (like the Unitn cluster).\
+Note that in the following list there are duplicate files from above: this is the case because the approaches have been revisited to be used for benchmarking the MPI approach.
 
 -   **MPI approach**\
     This approach used a distributed memory model, rather than a distributed computation model. It also includes a rivisited version of the sequential transposition and symmetry check.\
-    File: [01b_transposition_sequential.c]()
+    File: [01b_transposition_sequential.c](./del2/01b_transposition_sequential.c)
 
-    -   _Compilation_: `gcc 01b_transposition_sequential.c -o ./exec/01b_transposition_sequential.out`
-    -   _Execution_: `./exec/01b_transposition_sequential <iterations> <n> (matrix size is 2^n)`
+    -   _Compilation_: `gcc - O0 01b_transposition_sequential.c -o ./exec/01b_transposition_sequential.out`
+    -   _Execution_: `./exec/01b_transposition_sequential <n> <iterations>`
+
+    File: [01c_transposition_sequential_blocks.c](./del2/01c_transposition_sequential_blocks.c)
+
+    -   _Compilation_: `gcc -O0 01c_transposition_sequential_blocks.c -o ./exec/01c_transposition_sequential_blocks.out`
+    -   _Execution_: `./exec/01c_transposition_sequential_blocks <n> <iterations>`
+
+    File: [03b_transposition_omp.c](./del2/03b_transposition_omp.c)
+
+    -   _Compilation_: `gcc -O2 -fopenmp 03b_transposition_omp.c -o ./exec/03b_transposition_omp.out`
+    -   _Execution_: `./exec/03b_transposition_omp <n> <n_threads> <iterations>`
+
+    File: [03c_transposition_omp_blocks.c](./del2/03c_transposition_omp_blocks.c)
+
+    -   _Compilation_: `gcc -O2 -fopenmp 03c_transposition_omp_blocks.c -o ./exec/03c_transposition_omp_blocks.out`
+    -   _Execution_: `./exec/03c_transposition_omp_blocks <n> <n_threads> <iterations>`
 
     File: [04_transposition_mpi_one.c]()\
-    This solution's approach is to use an all-to-all distribution so that every processor has the entire matrix at it's disposal, but then only transposes/symmetry checks a part of it (a single line to a single column).
+    This solution's approach is to use MPI Broadcast so that every processor has the entire matrix at it's disposal, but then only transposes/symmetry checks a part of it (a block of lines to a block of columns).
 
     -   _Compilation_: `mpicc 04_transposition_mpi_one.c -o ./exec/04_transposition_mpi_one.out`
     -   _Execution_: `mpirun -np <n_processors> ./exec/04_transposition_mpi_one <n> (matrix size is 2^n)`
 
     File: [05_transposition_mpi_two.c]()\
-    This solution's approach optimizes the previous one, so rather than sending the entire matrix to all processors, to then only work on a single line like before, only the single line to operate on is distributed to the designed processor.
+    This solution's approach optimizes the previous one, so rather than sending the entire matrix to all processors, to then only work on a block of lines like before, only the single block to operate on is distributed to the designed processor.
 
     -   _Compilation_: `mpicc 05_transposition_mpi_two.c -o ./exec/05_transposition_mpi_two.out`
     -   _Execution_: `mpirun -np <n_processors> ./exec/05_transposition_mpi_two <n> (matrix size is 2^n)`
-
-    File: [06_transposition_mpi_symmetry.c]()
-
-    -   _Compilation_: `gg`
-    -   _Execution_: `gg`

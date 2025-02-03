@@ -69,7 +69,7 @@ int checkTranspose(float **matrix, float **transpose, int n) {
 
 int main(int argc, char *argv[]) {
     if (argc != 4) {
-        printf("Usage: %s <n> (matrix size is 2^n) <n_threads> <iterations>\n", argv[0]);
+        printf("Usage: %s <n> <n_threads> <iterations>\n", argv[0]);
         return 1;
     }
 
