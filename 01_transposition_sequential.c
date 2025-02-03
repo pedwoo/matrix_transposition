@@ -1,13 +1,21 @@
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <time.h>
-#include <windows.h>
+#include <sys/time.h>
 
-void initializeMatrix(float **matrix, int n) {
+void initializeMatrixAsym(float **matrix, int n) {
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < n; j++) {
             matrix[i][j] = (float)rand() / RAND_MAX * 100;
+        }
+    }
+}
+
+void initializeMatrixSym(float **matrix, int n) {
+    for (int i = 0; i < n; i++) {
+        for (int j = i; j < i; j++) {
+            matrix[i][j] = (float)rand() / RAND_MAX * 100;
+            matrix[j][i] = matrix[i][j];
         }
     }
 }
@@ -34,94 +42,81 @@ void matTranspose(float **matrix, float **transpose, int n) {
     }
 }
 
+// Code for average performance evaluation
+const int sizes[] = {16, 32, 64, 128, 256, 512, 1024, 2048, 4096};
 int main() {
-    int n;
-    printf("Enter the size of the matrix: ");
-    scanf("%d", &n);
+    printf("TRANSPOSITION TIME EVALUATION\n");
+    for (int s = 0; s < 9; s++) {
+        int n = sizes[s];
+        double total_t_time = 0.0;
 
-    float **matrix = (float **)malloc(n * sizeof(float *));
-    float **transpose = (float **)malloc(n * sizeof(float *));
-    for (int i = 0; i < n; i++) {
-        matrix[i] = (float *)malloc(n * sizeof(float));
-        transpose[i] = (float *)malloc(n * sizeof(float));
+        for (int z = 0; z < 3; z++) {
+            float **matrix = (float **)malloc(n * sizeof(float *));
+            float **transpose = (float **)malloc(n * sizeof(float *));
+            for (int i = 0; i < n; i++) {
+                matrix[i] = (float *)malloc(n * sizeof(float));
+                transpose[i] = (float *)malloc(n * sizeof(float));
+            }
+
+            initializeMatrixAsym(matrix, n);
+
+            struct timeval start_time, end_time;
+
+            gettimeofday(&start_time, NULL);
+            matTranspose(matrix, transpose, n);
+            gettimeofday(&end_time, NULL);
+
+            long seconds = end_time.tv_sec - start_time.tv_sec;
+            long microseconds = end_time.tv_usec - start_time.tv_usec;
+            double time_diff = (seconds * 1000.0) + (microseconds / 1000.0);
+
+            total_t_time += time_diff;
+
+            for (int i = 0; i < n; i++) {
+                free(matrix[i]);
+                free(transpose[i]);
+            }
+            free(matrix);
+            free(transpose);
+        }
+        printf("Matrix size: %d, time: %.6f ms\n", sizes[s], total_t_time / 100);
     }
+    printf("\nSYMMETRY CHECK TIME EVALUATION\n");
+    for (int s = 0; s < 9; s++) {
+        int n = sizes[s];
+        double total_s_time = 0.0;
 
-    srand(time(NULL));
-    initializeMatrix(matrix, n);
+        for (int z = 0; z < 3; z++) {
+            float **matrix = (float **)malloc(n * sizeof(float *));
+            float **transpose = (float **)malloc(n * sizeof(float *));
+            for (int i = 0; i < n; i++) {
+                matrix[i] = (float *)malloc(n * sizeof(float));
+                transpose[i] = (float *)malloc(n * sizeof(float));
+            }
 
-    // Using QueryPerformanceCounter for it provides higher precision
-    LARGE_INTEGER frequency, start_time, end_time;
-    double time_diff;
-    QueryPerformanceFrequency(&frequency);
+            initializeMatrixAsym(matrix, n);
 
-    // Performance evaluation of symmetric check
-    QueryPerformanceCounter(&start_time);
-    int isSymmetric = checkSym(matrix, n);
-    QueryPerformanceCounter(&end_time);
-    time_diff = (double)(end_time.QuadPart - start_time.QuadPart) * 1000.0 / frequency.QuadPart;
-    printf("Time to check symmetry: %.6f ms ==> ", time_diff);
-    printf("This matrix is %s\n", isSymmetric ? "symmetric" : "asymmetric");
+            struct timeval start_time, end_time;
 
-    // Performance evaluation of matrix transpose
-    QueryPerformanceCounter(&start_time);  // Start timing
-    matTranspose(matrix, transpose, n);
-    QueryPerformanceCounter(&end_time);  // End timing
-    time_diff = (double)(end_time.QuadPart - start_time.QuadPart) * 1000.0 / frequency.QuadPart;
-    printf("Time to transpose: %.6f ms\n", time_diff);
+            gettimeofday(&start_time, NULL);
+            volatile int isSymmetric = checkSym(matrix, n);
+            gettimeofday(&end_time, NULL);
+
+            long seconds = end_time.tv_sec - start_time.tv_sec;
+            long microseconds = end_time.tv_usec - start_time.tv_usec;
+            double time_diff = (seconds * 1000.0) + (microseconds / 1000.0);
+
+            total_s_time += time_diff;
+
+            for (int i = 0; i < n; i++) {
+                free(matrix[i]);
+                free(transpose[i]);
+            }
+            free(matrix);
+            free(transpose);
+        }
+        printf("Matrix size: %d, time: %.6f ms\n", sizes[s], total_s_time / 100);
+    }
 
     return 0;
 }
-
-// Code for average performance evaluation
-// int main() {
-//     int n;
-//     printf("Enter the size of the matrix: ");
-//     scanf("%d", &n);
-//     double total_s_time = 0.0;
-//     double total_t_time = 0.0;
-
-//     for (int z = 0; z < 100; z++) {
-//         float **matrix = (float **)malloc(n * sizeof(float *));
-//         float **transpose = (float **)malloc(n * sizeof(float *));
-//         for (int i = 0; i < n; i++) {
-//             matrix[i] = (float *)malloc(n * sizeof(float));
-//             transpose[i] = (float *)malloc(n * sizeof(float));
-//         }
-
-//         srand(time(NULL));
-//         initializeMatrix(matrix, n);
-
-//         // Using QueryPerformanceCounter for it provides higher precision
-//         LARGE_INTEGER frequency, start_time, end_time;
-//         double time_diff;
-//         QueryPerformanceFrequency(&frequency);
-
-//         // Performance evaluation of symmetric check
-//         QueryPerformanceCounter(&start_time);
-//         int isSymmetric = checkSym(matrix, n);
-//         QueryPerformanceCounter(&end_time);
-//         time_diff = (double)(end_time.QuadPart - start_time.QuadPart) * 1000.0 / frequency.QuadPart;
-//         // printf("Time to check symmetry: %.4f ms ==> ", time_diff);
-//         // printf("This matrix is %s\n", isSymmetric ? "symmetric" : "asymmetric");
-//         total_s_time += time_diff;
-
-//         // Performance evaluation of matrix transpose
-//         QueryPerformanceCounter(&start_time);
-//         matTranspose(matrix, transpose, n);
-//         QueryPerformanceCounter(&end_time);
-//         time_diff = (double)(end_time.QuadPart - start_time.QuadPart) * 1000.0 / frequency.QuadPart;
-//         // printf("Time to transpose: %.4f ms\n", time_diff);
-//         total_t_time += time_diff;
-//         printf("Iteration %d\n", z);
-//         for (int i = 0; i < n; i++) {
-//             free(matrix[i]);
-//             free(transpose[i]);
-//         }
-//         free(matrix);
-//         free(transpose);
-//     }
-//     printf("Average s time: %.6f ms\n", total_s_time / 100);
-//     printf("Average t time: %.6f ms\n", total_t_time / 100);
-
-//     return 0;
-// }
