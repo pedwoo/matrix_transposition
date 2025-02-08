@@ -45,7 +45,6 @@ int checkSymMPI(float *matrix, int n, int rank, int num_processor) {
         for (int j = i + 1; j < n; j++) {
             if (fabs(matrix[i * n + j] - matrix[j * n + i]) > EPSILON) {
                 local_sym = 0;
-                break;
             }
         }
     }
@@ -158,8 +157,8 @@ int main(int argc, char *argv[]) {
     }
 
     if (rank == 0) {
-        printf("Average symmetry chck time (size: %d, iterations: %d): %f ms\n", n, iterations, (total_s / iterations) * 1000);
-        printf("Average transposition time (size: %d, iterations: %d): %f ms\n", n, iterations, (total_t / iterations) * 1000);
+        printf("Average symmetry chck time (size: %d, np: %d, iterations: %d): %f ms\n", n, num_processors, iterations, (total_s / iterations) * 1000);
+        printf("Average transposition time (size: %d, np: %d, iterations: %d): %f ms\n", n, num_processors, iterations, (total_t / iterations) * 1000);
         free(matrix);
         free(transposed);
     }

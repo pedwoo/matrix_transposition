@@ -44,7 +44,6 @@ int checkSymMPI(float *matrix, int n, int rank, int num_processor) {
         for (int j = i + 1; j < n; j++) {
             if (fabs(matrix[i * n + j] - matrix[j * n + i]) > EPSILON) {
                 local_sym = 0;
-                break;
             }
         }
     }
@@ -64,7 +63,7 @@ void matTransposeMPI(float *matrix, float *transposed, int n, int rank, int num_
     float *local_block = (float *)malloc(local_rows_number * n * sizeof(float));
 
     // Create a buffer for sending columns and receiving rows
-    float *send_col_buffer = (float *)malloc(local_rows_number * sizeof(float));
+    float *send_row_buffer = (float *)malloc(local_rows_number * sizeof(float));
     float *recv_row_buffer = NULL;
     if (rank == 0) {
         recv_row_buffer = (float *)malloc(n * sizeof(float));
@@ -74,11 +73,11 @@ void matTransposeMPI(float *matrix, float *transposed, int n, int rank, int num_
     MPI_Scatter(matrix, local_rows_number * n, MPI_FLOAT, local_block, local_rows_number * n, MPI_FLOAT, 0, MPI_COMM_WORLD);
     for (int col = 0; col < n; col++) {
         for (int row = 0; row < local_rows_number; row++) {
-            send_col_buffer[row] = local_block[row * n + col];
+            send_row_buffer[row] = local_block[row * n + col];
         }
 
         // Gather the transposed rows from all processes
-        MPI_Gather(send_col_buffer, local_rows_number, MPI_FLOAT, recv_row_buffer, local_rows_number, MPI_FLOAT, 0, MPI_COMM_WORLD);
+        MPI_Gather(send_row_buffer, local_rows_number, MPI_FLOAT, recv_row_buffer, local_rows_number, MPI_FLOAT, 0, MPI_COMM_WORLD);
         // Combine the transposed rows back into the matrix (only on the main thread)
         if (rank == 0) {
             for (int row_main = 0; row_main < n; row_main++) {
@@ -87,7 +86,7 @@ void matTransposeMPI(float *matrix, float *transposed, int n, int rank, int num_
         }
     }
 
-    free(send_col_buffer);
+    free(send_row_buffer);
     free(local_block);
 
     if (rank == 0) {
@@ -165,8 +164,8 @@ int main(int argc, char *argv[]) {
     }
 
     if (rank == 0) {
-        printf("Average symmetry chck time (size: %d, iterations: %d): %f ms\n", n, iterations, (total_s / iterations) * 1000);
-        printf("Average transposition time (size: %d, iterations: %d): %f ms\n", n, iterations, (total_t / iterations) * 1000);
+        printf("Average symmetry chck time (size: %d, np: %d, iterations: %d): %f ms\n", n, num_processors, iterations, (total_s / iterations) * 1000);
+        printf("Average transposition time (size: %d, np: %d, iterations: %d): %f ms\n", n, num_processors, iterations, (total_t / iterations) * 1000);
         free(matrix);
         free(transposed);
     }
