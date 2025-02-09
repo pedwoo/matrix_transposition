@@ -53,7 +53,7 @@ echo "=== Transposition and symmetry check stats ==="
 echo "\n=== Running Sequential ==="
 # Arguments are <size (2^n)> <iterations>
 ./exec/01b_transposition_sequential 4 $ITERATIONS
-./exec/01b_transposition_sequential 5 $ITERATIONS
+./exec/01b_transposition_sequential 5 $ITTERATIONS
 ./exec/01b_transposition_sequential 6 $ITERATIONS
 ./exec/01b_transposition_sequential 7 $ITERATIONS
 ./exec/01b_transposition_sequential 8 $ITERATIONS
@@ -80,29 +80,27 @@ echo "\n=== Running OpenMP (32 threads) ==="
 # Run MPI approach one for all sizes
 echo "\n=== Running MPI_one (32 processors) ==="
 # Arguments are: -np <n_processors> <size (2^n)> <iterations>
-mpirun -np 16 ./exec/04_transposition_mpi_one 4 $ITERATIONS
-mpirun -np 16 ./exec/04_transposition_mpi_one 5 $ITERATIONS
-mpirun -np 16 ./exec/04_transposition_mpi_one 6 $ITERATIONS
-mpirun -np 16 ./exec/04_transposition_mpi_one 7 $ITERATIONS
-mpirun -np 16 ./exec/04_transposition_mpi_one 8 $ITERATIONS
-mpirun -np 16 ./exec/04_transposition_mpi_one 9 $ITERATIONS
-mpirun -np 16 ./exec/04_transposition_mpi_one 10 $ITERATIONS
-mpirun -np 16 ./exec/04_transposition_mpi_one 11 $ITERATIONS
-mpirun -np 16 ./exec/04_transposition_mpi_one 12 $ITERATIONS
+mpirun -np 32 ./exec/04_transposition_mpi_one 5 $ITERATIONS
+mpirun -np 32 ./exec/04_transposition_mpi_one 6 $ITERATIONS
+mpirun -np 32 ./exec/04_transposition_mpi_one 7 $ITERATIONS
+mpirun -np 32 ./exec/04_transposition_mpi_one 8 $ITERATIONS
+mpirun -np 32 ./exec/04_transposition_mpi_one 9 $ITERATIONS
+mpirun -np 32 ./exec/04_transposition_mpi_one 10 $ITERATIONS
+mpirun -np 32 ./exec/04_transposition_mpi_one 11 $ITERATIONS
+mpirun -np 32 ./exec/04_transposition_mpi_one 12 $ITERATIONS
 
 
 # Run MPI approach two for all sizes
 echo  "\n=== Running MPI_two (32 processors) ==="
 # Arguments are: -np <n_processors> <size (2^n)> <iterations>
-mpirun -np 16 ./exec/05_transposition_mpi_two 4 $ITERATIONS
-mpirun -np 16 ./exec/05_transposition_mpi_two 5 $ITERATIONS
-mpirun -np 16 ./exec/05_transposition_mpi_two 6 $ITERATIONS
-mpirun -np 16 ./exec/05_transposition_mpi_two 7 $ITERATIONS
-mpirun -np 16 ./exec/05_transposition_mpi_two 8 $ITERATIONS
-mpirun -np 16 ./exec/05_transposition_mpi_two 9 $ITERATIONS
-mpirun -np 16 ./exec/05_transposition_mpi_two 10 $ITERATIONS
-mpirun -np 16 ./exec/05_transposition_mpi_two 11 $ITERATIONS
-mpirun -np 16 ./exec/05_transposition_mpi_two 12 $ITERATIONS
+mpirun -np 32 ./exec/05_transposition_mpi_two 5 $ITERATIONS
+mpirun -np 32 ./exec/05_transposition_mpi_two 6 $ITERATIONS
+mpirun -np 32 ./exec/05_transposition_mpi_two 7 $ITERATIONS
+mpirun -np 32 ./exec/05_transposition_mpi_two 8 $ITERATIONS
+mpirun -np 32 ./exec/05_transposition_mpi_two 9 $ITERATIONS
+mpirun -np 32 ./exec/05_transposition_mpi_two 10 $ITERATIONS
+mpirun -np 32 ./exec/05_transposition_mpi_two 11 $ITERATIONS
+mpirun -np 32 ./exec/05_transposition_mpi_two 12 $ITERATIONS
 
 
 # Strong Scaling for MPI_one and MPI_two 

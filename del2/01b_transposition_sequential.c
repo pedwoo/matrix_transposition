@@ -15,10 +15,11 @@ void initializeMatrix(float **matrix, int n) {
 
 // Symmetry check without blocks
 int checkSym(float **matrix, int n) {
+    int isSym = 1;
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < n; j++) {
             if (fabs(matrix[i][j] - matrix[j][i]) > FLOAT_COMPARE_TOLERANCE) {
-                return 0;
+                isSym = 0;
             }
         }
     }
