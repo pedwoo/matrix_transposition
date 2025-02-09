@@ -101,3 +101,7 @@ Note that in the following list there are duplicate files from above: this is th
 
     -   _Compilation_: `mpicc 05_transposition_mpi_two.c -o ./exec/05_transposition_mpi_two.out`
     -   _Execution_: `mpirun -np <n_processors> ./exec/05_transposition_mpi_two <n> (matrix size is 2^n)`
+
+## Contacts
+
+You can contact me at: `daniele.pedrolli@studenti.unitn.it`
