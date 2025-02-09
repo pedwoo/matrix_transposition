@@ -3,35 +3,10 @@
 ## Introduction and project objective
 
 This repository contains the project for the "Introduction to Parallel Computing" @Unitrento, year 2024/25, author: Daniele Pedrolli.\
-The project is composed of two parts, the README.md that was handed in with the first deliverable can be found in `del1/README_old.md`.\
+The project is composed of two parts, the README.md that was handed in with the first deliverable can be found in `del1/README_old.md`. The commands to run them are, respectively: `qsub -q short_cpuQ OpenMP.pbs` and `qsub -q short_cpuQ MPI.pbs`.\
 The first part of the project aims at improving the performance of matrix transposition by using more computational power through OpenMP, while the second part is about optimizing it using more memory resources through MPI. For the first part of the project there is also a version of the code that was developed on a Windows-based system (`del1/windows code`), alongside the code that was run on the Unitn cluster.
 
 ## Repository structure
-
-<!-- ```
-.
-├── del1
-│   ├── exec
-│   │   ├── * -> Compiled linux code
-│   ├── windows code -> code compatible with windows machine
-│   │   ├── exec
-│   │   │   ├── * -> Compiled windows source files
-│   │   ├── performance
-│   │   │   ├── * -> Modified windows code for performance evaluation
-│   │   ├── utils
-│   │   │   ├── graphs -> Graphs obtained from performance evaluation
-│   │   │   ├── mingw-components.txt -> required minGW libraries
-│   │   ├── 01_transposition_sequential.c
-│   │   ├── 02_transposition_par_implicit.c
-│   │   ├── 03_transposition_par_openmp.c
-│   │   ├── util.c -> utility function for bandwidth computation
-│   ├── openMP.pbs
-│   ├── README_old.md -> README submitted with first deliverable
-├── del2
-│   ├── exec
-│   │   ├── * -> Compiled linux code
-│   ├── MPI.pbs
-``` -->
 
 ```bash
 .
@@ -53,10 +28,11 @@ The first part of the project aims at improving the performance of matrix transp
 .
 ├── del2
 │   ├── exec/                                   # Compiled Linux source code
+│   ├── graphs/                                 # Graphs made for second deliverable
 │   ├── 01b_transposition_sequential.c
-│   ├── 01c_transposition_sequential_blocks.c
+│   ├── 01c_transposition_sequential_blocks.c   # Unused
 │   ├── 03b_transposition_omp.c
-│   ├── 03c_transposition_omp_blocks.c
+│   ├── 03c_transposition_omp_blocks.c          # Unused
 │   ├── 04_transposition_mpi_one.c
 │   ├── 05_transposition_mpi_two.c
 │   ├── MPI.pbs
